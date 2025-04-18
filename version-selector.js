@@ -32,20 +32,18 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = selectedVersion + currentPage;
       });
 
-      // Inject into the bottom of the sidebar
-      const sidebar = document.querySelector("div.sidebar-scroll");
-      const container = document.createElement("div");
-      container.className = "version-container"; // Assign a CSS class for styling
-
       const label = document.createElement("label");
       label.textContent = "Version:";
       label.className = "version-label"; // Assign a CSS class to the label
       label.setAttribute("for", selector.id); // Add for attribute for accessibility
 
+      const container = document.createElement("div");
+      container.className = "version-container"; // Assign a CSS class for styling
       container.appendChild(label);
       container.appendChild(selector);
 
-      // Furo sidebar uses flex layout: we append to the sidebar
+      // Insert at the top of the sidebar
+      const sidebar = document.querySelector("div.sidebar-scroll");
       sidebar.insertBefore(container, sidebar.children[0]);
     })
     .catch(error => {
