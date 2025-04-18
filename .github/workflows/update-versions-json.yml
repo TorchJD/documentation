@@ -1,0 +1,51 @@
+name: Update Versions JSON
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-versions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate versions.json
+        run: |
+          version_dirs=()
+          while IFS= read -r dir; do
+            version_dirs+=("${dir#./}")
+          done < <(find . -maxdepth 1 -type d -regex './v[0-9]+\.[0-9]+\.[0-9]+' | sort -Vr)
+
+          # Start JSON array
+          json="[\n"
+
+          # Add static entries
+          json+="  \"latest\",\n  \"stable\""
+
+          # Add dynamic versions
+          for v in "${version_dirs[@]}"; do
+            json+=",\n  \"$v\""
+          done
+
+          json+="\n]"
+
+          echo -e "$json" > versions.json
+          echo "versions.json will look like:"
+          cat versions.json
+
+      - name: Commit and push versions.json
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add versions.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update versions.json"
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi
