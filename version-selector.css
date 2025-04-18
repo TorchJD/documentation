@@ -16,4 +16,5 @@
 .version-container {
   display: flex;
   gap: 0.1rem;
+  padding: 1rem;
 }

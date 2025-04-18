@@ -35,12 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // Inject into the bottom of the sidebar
       const sidebar = document.querySelector("div.sidebar-scroll");
       const container = document.createElement("div");
-      container.style.padding = "1rem";
       container.className = "version-container"; // Assign a CSS class for styling
 
       const label = document.createElement("label");
       label.textContent = "Version:";
-      label.style.marginRight = "0.5rem"; // Optional: Add spacing between the text and dropdown
       label.className = "version-label"; // Assign a CSS class to the label
       label.setAttribute("for", selector.id); // Add for attribute for accessibility
 
