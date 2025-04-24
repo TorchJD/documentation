@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Insert at the top of the sidebar
       const sidebar = document.querySelector("div.sidebar-scroll");
-      sidebar.insertBefore(container, sidebar.children[0]);
+      sidebar.appendChild(container, sidebar.children[0]);
     })
     .catch(error => {
       console.error("Version selector error:", error);
