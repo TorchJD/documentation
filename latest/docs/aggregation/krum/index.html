@@ -237,8 +237,44 @@
           </label>
         </div>
         <article role="main">
-          <section id="krum">
-<h1>Krum<a class="headerlink" href="#krum" title="Link to this heading">¶</a></h1>
+          <section id="module-torchjd.aggregation.krum">
+<span id="krum"></span><h1>Krum<a class="headerlink" href="#module-torchjd.aggregation.krum" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="torchjd.aggregation.krum.Krum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.krum.</span></span><span class="sig-name descname"><span class="pre">Krum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_byzantine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/krum.py#L9-L50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.krum.Krum" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.bases.Aggregator" title="torchjd.aggregation.bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> for adversarial federated learning, as defined
+in <a class="reference external" href="https://proceedings.neurips.cc/paper/2017/file/f4b9ec30ad9f68f89b29639786cb62ef-Paper.pdf">Machine Learning with Adversaries: Byzantine Tolerant Gradient Descent</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_byzantine</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The number of rows of the input matrix that can come from an adversarial
+source.</p></li>
+<li><p><strong>n_selected</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The number of selected rows in the context of Multi-Krum. Defaults to 1.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>Use Multi-Krum to aggregate a matrix with 1 adversarial row.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Krum</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Krum</span><span class="p">(</span><span class="n">n_byzantine</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_selected</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mf">1.</span><span class="p">,</span>     <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mf">1.</span><span class="p">,</span>     <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mf">75.</span><span class="p">,</span> <span class="o">-</span><span class="mf">666.</span><span class="p">,</span> <span class="mi">23</span><span class="p">],</span>  <span class="c1"># adversarial row</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mf">1.</span><span class="p">,</span>     <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mf">2.</span><span class="p">,</span>     <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+<span class="go">tensor([1.2500, 0.7500, 1.5000])</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
 </section>
 
         </article>

@@ -237,8 +237,29 @@
           </label>
         </div>
         <article role="main">
-          <section id="pcgrad">
-<h1>PCGrad<a class="headerlink" href="#pcgrad" title="Link to this heading">¶</a></h1>
+          <section id="module-torchjd.aggregation.pcgrad">
+<span id="pcgrad"></span><h1>PCGrad<a class="headerlink" href="#module-torchjd.aggregation.pcgrad" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="torchjd.aggregation.pcgrad.PCGrad">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.pcgrad.</span></span><span class="sig-name descname"><span class="pre">PCGrad</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/pcgrad.py#L8-L29"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.pcgrad.PCGrad" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.bases.Aggregator" title="torchjd.aggregation.bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> as defined in algorithm 1 of
+<a class="reference external" href="https://arxiv.org/pdf/2001.06782.pdf">Gradient Surgery for Multi-Task Learning</a>.</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>Use PCGrad to aggregate a matrix.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCGrad</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">PCGrad</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([[</span><span class="o">-</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span> <span class="p">[</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+<span class="go">tensor([0.5848, 3.8012, 3.8012])</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
 </section>
 
         </article>
