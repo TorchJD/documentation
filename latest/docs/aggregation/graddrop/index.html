@@ -237,40 +237,8 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-torchjd.aggregation.graddrop">
-<span id="graddrop"></span><h1>GradDrop<a class="headerlink" href="#module-torchjd.aggregation.graddrop" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.graddrop.GradDrop">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.graddrop.</span></span><span class="sig-name descname"><span class="pre">GradDrop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;function</span> <span class="pre">_identity&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leak=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/graddrop.py#L13-L87"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.graddrop.GradDrop" title="Link to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.bases.Aggregator" title="torchjd.aggregation.bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> that applies the gradient combination steps from
-GradDrop, as defined in lines 10 to 15 of Algorithm 1 of <a class="reference external" href="https://arxiv.org/pdf/2010.06808.pdf">Just Pick a Sign: Optimizing Deep
-Multitask Models with Gradient Sign Dropout</a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a></span>) – The function to apply to the Gradient Positive Sign Purity. It should be monotically
-increasing. Defaults to identity.</p></li>
-<li><p><strong>leak</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – The tensor of leak values, determining how much each row is allowed to leak
-through. Defaults to None, which means no leak.</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-example admonition">
-<p class="admonition-title">Example</p>
-<p>Use GradDrop to aggregate a matrix.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradDrop</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">GradDrop</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([[</span><span class="o">-</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span> <span class="p">[</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
-<span class="go">tensor([6., 2., 2.])</span>
-</pre></div>
-</div>
-</div>
-</dd></dl>
-
+          <section id="graddrop">
+<h1>GradDrop<a class="headerlink" href="#graddrop" title="Link to this heading">¶</a></h1>
 </section>
 
         </article>

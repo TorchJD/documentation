@@ -237,66 +237,8 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-torchjd.autojac.mtl_backward">
-<span id="mtl-backward"></span><h1>mtl_backward<a class="headerlink" href="#module-torchjd.autojac.mtl_backward" title="Link to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="torchjd.autojac.mtl_backward.mtl_backward">
-<span class="sig-prename descclassname"><span class="pre">torchjd.autojac.mtl_backward.</span></span><span class="sig-name descname"><span class="pre">mtl_backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">losses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autojac/mtl_backward.py#L23-L117"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autojac.mtl_backward.mtl_backward" title="Link to this definition">¶</a></dt>
-<dd><p>In the context of Multi-Task Learning (MTL), we often have a shared feature extractor followed
-by several task-specific heads. A loss can then be computed for each task.</p>
-<p>This function computes the gradient of each task-specific loss with respect to its task-specific
-parameters and accumulates it in their <code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields. Then, it computes the Jacobian of all
-losses with respect to the shared parameters, aggregates it and accumulates the result in their
-<code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>losses</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</span>) – The task losses. The Jacobian matrix will have one row per loss.</p></li>
-<li><p><strong>features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</span>) – The last shared representation used for all tasks, as given by the feature
-extractor. Should be non-empty.</p></li>
-<li><p><strong>aggregator</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../../aggregation/bases/#torchjd.aggregation.bases.Aggregator" title="torchjd.aggregation.bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a></span>) – Aggregator used to reduce the Jacobian into a vector.</p></li>
-<li><p><strong>tasks_params</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]]]</span>) – The parameters of each task-specific head. Their <code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> flags
-must be set to <code class="docutils literal notranslate"><span class="pre">True</span></code>. If not provided, the parameters considered for each task will
-default to the leaf tensors that are in the computation graph of its loss, but that were not
-used to compute the <code class="docutils literal notranslate"><span class="pre">features</span></code>.</p></li>
-<li><p><strong>shared_params</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]]</span>) – The parameters of the shared feature extractor. The Jacobian matrix will
-have one column for each value in these tensors. Their <code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> flags must be set
-to <code class="docutils literal notranslate"><span class="pre">True</span></code>. If not provided, defaults to the leaf tensors that are in the computation graph
-of the <code class="docutils literal notranslate"><span class="pre">features</span></code>.</p></li>
-<li><p><strong>retain_graph</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph used to compute the grad will be freed. Defaults to
-<code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>parallel_chunk_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – The number of scalars to differentiate simultaneously in the
-backward pass. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, all coordinates of <code class="docutils literal notranslate"><span class="pre">tensors</span></code> will be differentiated in
-parallel at once. If set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, all coordinates will be differentiated sequentially. A
-larger value results in faster differentiation, but also higher memory usage. Defaults to
-<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
-</dd>
-</dl>
-<div class="admonition-example admonition">
-<p class="admonition-title">Example</p>
-<p>A usage example of <code class="docutils literal notranslate"><span class="pre">mtl_backward</span></code> is provided in
-<a class="reference internal" href="../../../examples/mtl/"><span class="doc">Multi-Task Learning (MTL)</span></a>.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">shared_params</span></code> should contain no parameter in common with <code class="docutils literal notranslate"><span class="pre">tasks_params</span></code>. The different
-tasks may have some parameters in common. In this case, the sum of the gradients with
-respect to those parameters will be accumulated into their <code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>To differentiate in parallel, <code class="docutils literal notranslate"><span class="pre">mtl_backward</span></code> relies on <code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code>, which has some
-limitations: <a class="reference external" href="https://github.com/pytorch/pytorch/issues/138422">it does not work on the output of compiled functions</a>, <a class="reference external" href="https://github.com/TorchJD/torchjd/issues/184">when some tensors have</a> <code class="docutils literal notranslate"><span class="pre">retains_grad=True</span></code> or <a class="reference external" href="https://github.com/TorchJD/torchjd/issues/220">when using an
-RNN on CUDA</a>, for instance. If you
-experience issues with <code class="docutils literal notranslate"><span class="pre">backward</span></code> try to use <code class="docutils literal notranslate"><span class="pre">parallel_chunk_size=1</span></code> to avoid relying on
-<code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code>.</p>
-</div>
-</dd></dl>
-
+          <section id="mtl-backward">
+<h1>mtl_backward<a class="headerlink" href="#mtl-backward" title="Link to this heading">¶</a></h1>
 </section>
 
         </article>

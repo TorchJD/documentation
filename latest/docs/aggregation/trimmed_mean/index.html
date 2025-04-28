@@ -237,42 +237,8 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-torchjd.aggregation.trimmed_mean">
-<span id="trimmed-mean"></span><h1>Trimmed Mean<a class="headerlink" href="#module-torchjd.aggregation.trimmed_mean" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.trimmed_mean.TrimmedMean">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.trimmed_mean.</span></span><span class="sig-name descname"><span class="pre">TrimmedMean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trim_number</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/trimmed_mean.py#L7-L73"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.trimmed_mean.TrimmedMean" title="Link to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.bases.Aggregator" title="torchjd.aggregation.bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> for adversarial federated learning, that trims
-the most extreme values of the input matrix, before averaging its rows, as defined in
-<a class="reference external" href="https://proceedings.mlr.press/v80/yin18a/yin18a.pdf">Byzantine-Robust Distributed Learning: Towards Optimal Statistical Rates</a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trim_number</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The number of maximum and minimum values to remove from each column of the
-input matrix (note that <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">trim_number</span></code> values are removed from each column).</p>
-</dd>
-</dl>
-<div class="admonition-example admonition">
-<p class="admonition-title">Example</p>
-<p>Remove the maximum and the minimum value from each column of the <code class="docutils literal notranslate"><span class="pre">matrix</span></code>, then average
-the rows of the remaining matrix.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrimmedMean</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">TrimmedMean</span><span class="p">(</span><span class="n">trim_number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span>
-<span class="gp">... </span>    <span class="p">[</span> <span class="mf">1e11</span><span class="p">,</span>    <span class="mf">3.</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span>   <span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1e11</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span><span class="o">-</span><span class="mf">1e10</span><span class="p">,</span>  <span class="mf">1e10</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="p">[</span>   <span class="mf">2.</span><span class="p">,</span>    <span class="mf">2.</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
-<span class="go">tensor([1.5000, 2.5000])</span>
-</pre></div>
-</div>
-</div>
-</dd></dl>
-
+          <section id="trimmed-mean">
+<h1>Trimmed Mean<a class="headerlink" href="#trimmed-mean" title="Link to this heading">¶</a></h1>
 </section>
 
         </article>
