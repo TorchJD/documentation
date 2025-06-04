@@ -174,6 +174,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/rnn/">Recurrent Neural Network (RNN)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/lightning_integration/">PyTorch Lightning Integration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/amp/">Automatic Mixed Precision (AMP)</a></li>
 </ul>
@@ -237,13 +238,13 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-torchjd.aggregation.mgda">
-<span id="mgda"></span><h1>MGDA<a class="headerlink" href="#module-torchjd.aggregation.mgda" title="Link to this heading">¶</a></h1>
+          <section id="mgda">
+<h1>MGDA<a class="headerlink" href="#mgda" title="Link to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.mgda.MGDA">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.mgda.</span></span><span class="sig-name descname"><span class="pre">MGDA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchjd.aggregation.mgda.MGDA" title="Link to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.bases.Aggregator" title="torchjd.aggregation.bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> performing the gradient aggregation step of
-<a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1631073X12000738">Multiple-gradient descent algorithm (MGDA) for multiobjective optimization</a>. The implementation is
+<dt class="sig sig-object py" id="torchjd.aggregation.MGDA">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">MGDA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/v0.7.0/src/torchjd/aggregation/_mgda.py#L8-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.MGDA" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> performing the gradient aggregation
+step of <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1631073X12000738">Multiple-gradient descent algorithm (MGDA) for multiobjective optimization</a>. The implementation is
 based on Algorithm 2 of <a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2018/file/432aca3a1e345e339f35a30c8f65edce-Paper.pdf">Multi-Task Learning as Multi-Objective Optimization</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -320,7 +321,7 @@ based on Algorithm 2 of <a class="reference external" href="https://proceedings.
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=d85cf8e0"></script>
+</div><script src="../../../_static/documentation_options.js?v=471e6c7a"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>

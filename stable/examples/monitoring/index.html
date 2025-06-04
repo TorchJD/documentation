@@ -4,10 +4,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="backward" href="../../docs/autojac/backward/" /><link rel="prev" title="PyTorch Lightning Integration" href="../lightning_integration/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="PyTorch Lightning Integration" href="../lightning_integration/" /><link rel="prev" title="Recurrent Neural Network (RNN)" href="../rnn/" />
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.01.29 -->
-        <title>Automatic Mixed Precision (AMP) - TorchJD</title>
+        <title>Monitoring aggregations - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -40,7 +40,7 @@
     }
   }
 </style>
-    <link rel="canonical" href="https://torchjd.org/stable/examples/amp.html">
+    <link rel="canonical" href="https://torchjd.org/stable/examples/monitoring.html">
     <script src="/version-selector.js"></script>
     <link rel="stylesheet" href="/version-selector.css">
 </head>
@@ -174,9 +174,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../rnn/">Recurrent Neural Network (RNN)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../monitoring/">Monitoring aggregations</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lightning_integration/">PyTorch Lightning Integration</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Automatic Mixed Precision (AMP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../amp/">Automatic Mixed Precision (AMP)</a></li>
 </ul>
 </li>
 </ul>
@@ -238,23 +238,38 @@
           </label>
         </div>
         <article role="main">
-          <section id="automatic-mixed-precision-amp">
-<h1>Automatic Mixed Precision (AMP)<a class="headerlink" href="#automatic-mixed-precision-amp" title="Link to this heading">¶</a></h1>
-<p>In some cases, to save memory and reduce computation time, you may want to use <a class="reference external" href="https://pytorch.org/tutorials/recipes/recipes/amp_recipe.html">automatic mixed
-precision</a>. Since the
-<a class="reference external" href="https://pytorch.org/docs/stable/amp.html#gradient-scaling">torch.amp.GradScaler</a> class already
-works on multiple losses, it’s pretty straightforward to combine TorchJD and AMP. As usual, the
-forward pass should be wrapped within a <a class="reference external" href="https://pytorch.org/docs/stable/amp.html#torch.autocast">torch.autocast</a> context, and as usual, the loss (in our
-case, the losses) should preferably be scaled with a <a class="reference external" href="https://pytorch.org/docs/stable/amp.html#gradient-scaling">GradScaler</a> to avoid gradient underflow. The
-following example shows the resulting code for a multi-task learning use-case.</p>
+          <section id="monitoring-aggregations">
+<h1>Monitoring aggregations<a class="headerlink" href="#monitoring-aggregations" title="Link to this heading">¶</a></h1>
+<p>The <a class="reference internal" href="../../docs/aggregation/bases/"><span class="doc">Aggregator</span></a> class is a subclass of <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>.
+This allows registering hooks, which can be used to monitor some information about aggregations.
+The following code example demonstrates registering a hook to compute and print the cosine
+similarity between the aggregation performed by <a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a> and the
+average of the gradients, and another hook to compute and print the weights of the weighting of
+<a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a>.</p>
+<p>Updating the parameters of the model with the average gradient is equivalent to using gradient
+descent on the average of the losses. Observing a cosine similarity smaller than 1 means that
+Jacobian descent is doing something different than gradient descent. With
+<a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a>, this happens when the original gradients conflict (i.e.
+they have a negative inner product).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torch.amp</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradScaler</span>
-</span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequential</span><span class="p">,</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">MSELoss</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="kn">import</span> <span class="n">cosine_similarity</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchjd</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtl_backward</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
 
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">print_weights</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Prints the extracted weights.&quot;&quot;&quot;</span>
+</span><span class="hll">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weights: </span><span class="si">{</span><span class="n">weights</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span>
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">print_gd_similarity</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">aggregation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Prints the cosine similarity between the aggregation and the average gradient.&quot;&quot;&quot;</span>
+</span><span class="hll">    <span class="n">matrix</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class="hll">    <span class="n">gd_output</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">similarity</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">aggregation</span><span class="p">,</span> <span class="n">gd_output</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class="hll">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cosine similarity: </span><span class="si">{</span><span class="n">similarity</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span>
 <span class="n">shared_module</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">())</span>
 <span class="n">task1_module</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">task2_module</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -263,41 +278,29 @@ following example shows the resulting code for a multi-task learning use-case.</
     <span class="o">*</span><span class="n">task1_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
     <span class="o">*</span><span class="n">task2_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
 <span class="p">]</span>
-<span class="hll"><span class="n">scaler</span> <span class="o">=</span> <span class="n">GradScaler</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-</span><span class="n">loss_fn</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">()</span>
+
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">()</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">aggregator</span> <span class="o">=</span> <span class="n">UPGrad</span><span class="p">()</span>
 
+<span class="hll"><span class="n">aggregator</span><span class="o">.</span><span class="n">weighting</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">print_weights</span><span class="p">)</span>
+</span><span class="hll"><span class="n">aggregator</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">print_gd_similarity</span><span class="p">)</span>
+</span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 8 batches of 16 random input vectors of length 10</span>
 <span class="n">task1_targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 8 batches of 16 targets for the first task</span>
 <span class="n">task2_targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 8 batches of 16 targets for the second task</span>
 
 <span class="k">for</span> <span class="nb">input</span><span class="p">,</span> <span class="n">target1</span><span class="p">,</span> <span class="n">target2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">task1_targets</span><span class="p">,</span> <span class="n">task2_targets</span><span class="p">):</span>
-<span class="hll">    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">autocast</span><span class="p">(</span><span class="n">device_type</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">):</span>
-</span>        <span class="n">features</span> <span class="o">=</span> <span class="n">shared_module</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
-        <span class="n">output1</span> <span class="o">=</span> <span class="n">task1_module</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
-        <span class="n">output2</span> <span class="o">=</span> <span class="n">task2_module</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
-        <span class="n">loss1</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="n">target1</span><span class="p">)</span>
-        <span class="n">loss2</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output2</span><span class="p">,</span> <span class="n">target2</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">shared_module</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">output1</span> <span class="o">=</span> <span class="n">task1_module</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+    <span class="n">output2</span> <span class="o">=</span> <span class="n">task2_module</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+    <span class="n">loss1</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="n">target1</span><span class="p">)</span>
+    <span class="n">loss2</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output2</span><span class="p">,</span> <span class="n">target2</span><span class="p">)</span>
 
-<span class="hll">    <span class="n">scaled_losses</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">scale</span><span class="p">([</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">])</span>
-</span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-<span class="hll">    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">losses</span><span class="o">=</span><span class="n">scaled_losses</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">aggregator</span><span class="o">=</span><span class="n">aggregator</span><span class="p">)</span>
-</span><span class="hll">    <span class="n">scaler</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
-</span><span class="hll">    <span class="n">scaler</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-</span></pre></div>
-</div>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<p>Within the <code class="docutils literal notranslate"><span class="pre">torch.autocast</span></code> context, some operations may be done in <code class="docutils literal notranslate"><span class="pre">float16</span></code> type. For
-those operations, the tensors saved for the backward pass will also be of <code class="docutils literal notranslate"><span class="pre">float16</span></code> type.
-However, the Jacobian computed by <code class="docutils literal notranslate"><span class="pre">mtl_backward</span></code> will be of type <code class="docutils literal notranslate"><span class="pre">float32</span></code>, so the <code class="docutils literal notranslate"><span class="pre">.grad</span></code>
-fields of the model parameters will also be of type <code class="docutils literal notranslate"><span class="pre">float32</span></code>. This is in line with the
-behavior of PyTorch, that would also compute all gradients in <code class="docutils literal notranslate"><span class="pre">float32</span></code> type.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="../../docs/autojac/backward/"><span class="doc">torchjd.backward</span></a> can be similarly combined with AMP.</p>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">losses</span><span class="o">=</span><span class="p">[</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">aggregator</span><span class="o">=</span><span class="n">aggregator</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</pre></div>
 </div>
 </section>
 
@@ -306,23 +309,23 @@ behavior of PyTorch, that would also compute all gradients in <code class="docut
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../../docs/autojac/backward/">
+          <a class="next-page" href="../lightning_integration/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">backward</div>
+                <div class="title">PyTorch Lightning Integration</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../lightning_integration/">
+          <a class="prev-page" href="../rnn/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">PyTorch Lightning Integration</div>
+                <div class="title">Recurrent Neural Network (RNN)</div>
                 
               </div>
             </a>

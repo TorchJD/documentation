@@ -174,6 +174,7 @@
 <li class="toctree-l2"><a class="reference internal" href="iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rnn/">Recurrent Neural Network (RNN)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lightning_integration/">PyTorch Lightning Integration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="amp/">Automatic Mixed Precision (AMP)</a></li>
 </ul>
@@ -251,6 +252,8 @@ descent is used to optimize the vector of per-task losses of a multi-task model,
 dedicated backpropagation function <a class="reference internal" href="../docs/autojac/mtl_backward/"><span class="doc">mtl_backward</span></a>.</p></li>
 <li><p><a class="reference internal" href="rnn/"><span class="doc">Recurrent Neural Network (RNN)</span></a> shows how to apply Jacobian descent to RNN training,
 with one loss per output sequence element.</p></li>
+<li><p><a class="reference internal" href="monitoring/"><span class="doc">Monitoring Aggregations</span></a> shows how to monitor the aggregation performed by the
+aggregator, to check if Jacobian descent is prescribed for your use-case.</p></li>
 <li><p><a class="reference internal" href="lightning_integration/"><span class="doc">PyTorch Lightning Integration</span></a> showcases how to combine
 TorchJD with PyTorch Lightning, by providing an example implementation of a multi-task
 <code class="docutils literal notranslate"><span class="pre">LightningModule</span></code> optimized by Jacobian descent.</p></li>
@@ -309,7 +312,7 @@ TorchJD with PyTorch Lightning, by providing an example implementation of a mult
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=d85cf8e0"></script>
+</div><script src="../_static/documentation_options.js?v=471e6c7a"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>

@@ -174,6 +174,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/rnn/">Recurrent Neural Network (RNN)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/lightning_integration/">PyTorch Lightning Integration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/amp/">Automatic Mixed Precision (AMP)</a></li>
 </ul>
@@ -237,12 +238,12 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-torchjd.aggregation.imtl_g">
-<span id="imtl-g"></span><h1>IMTL-G<a class="headerlink" href="#module-torchjd.aggregation.imtl_g" title="Link to this heading">¶</a></h1>
+          <section id="imtl-g">
+<h1>IMTL-G<a class="headerlink" href="#imtl-g" title="Link to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.imtl_g.IMTLG">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.imtl_g.</span></span><span class="sig-name descname"><span class="pre">IMTLG</span></span><a class="headerlink" href="#torchjd.aggregation.imtl_g.IMTLG" title="Link to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.bases.Aggregator" title="torchjd.aggregation.bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> generalizing the method described in
+<dt class="sig sig-object py" id="torchjd.aggregation.IMTLG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">IMTLG</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/v0.7.0/src/torchjd/aggregation/_imtl_g.py#L9-L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.IMTLG" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../bases/#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> generalizing the method described in
 <a class="reference external" href="https://discovery.ucl.ac.uk/id/eprint/10120667/">Towards Impartial Multi-task Learning</a>.
 This generalization, defined formally in <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For Multi-Objective Optimization</a>, supports matrices with some linearly dependant rows.</p>
 <div class="admonition-example admonition">
@@ -312,7 +313,7 @@ This generalization, defined formally in <a class="reference external" href="htt
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=d85cf8e0"></script>
+</div><script src="../../../_static/documentation_options.js?v=471e6c7a"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
