@@ -4,10 +4,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="UPGrad" href="upgrad/" /><link rel="prev" title="mtl_backward" href="../autojac/mtl_backward/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Engine" href="engine/" /><link rel="prev" title="Automatic Mixed Precision (AMP)" href="../../examples/amp/" />
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.01.29 -->
-        <title>aggregation - TorchJD</title>
+        <title>autogram - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -40,7 +40,7 @@
     }
   }
 </style>
-    <link rel="canonical" href="https://torchjd.org/stable/docs/aggregation/index.html">
+    <link rel="canonical" href="https://torchjd.org/stable/docs/autogram/index.html">
     <script src="/version-selector.js"></script>
     <link rel="stylesheet" href="/version-selector.css">
 </head>
@@ -143,7 +143,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -183,8 +183,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../autogram/">autogram</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../autogram/engine/">Engine</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">autogram</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="engine/">Engine</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../autojac/">autojac</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autojac</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -192,23 +192,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../autojac/mtl_backward/">mtl_backward</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">aggregation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="upgrad/">UPGrad</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aligned_mtl/">Aligned-MTL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cagrad/">CAGrad</a></li>
-<li class="toctree-l2"><a class="reference internal" href="config/">ConFIG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="constant/">Constant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dualproj/">DualProj</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graddrop/">GradDrop</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imtl_g/">IMTL-G</a></li>
-<li class="toctree-l2"><a class="reference internal" href="krum/">Krum</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mean/">Mean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mgda/">MGDA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nash_mtl/">Nash-MTL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pcgrad/">PCGrad</a></li>
-<li class="toctree-l2"><a class="reference internal" href="random/">Random</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sum/">Sum</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trimmed_mean/">Trimmed Mean</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../aggregation/">aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/upgrad/">UPGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/aligned_mtl/">Aligned-MTL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/cagrad/">CAGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/config/">ConFIG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/constant/">Constant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/dualproj/">DualProj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/graddrop/">GradDrop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/imtl_g/">IMTL-G</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/krum/">Krum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/mean/">Mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/mgda/">MGDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/nash_mtl/">Nash-MTL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/pcgrad/">PCGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/random/">Random</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/sum/">Sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aggregation/trimmed_mean/">Trimmed Mean</a></li>
 </ul>
 </li>
 </ul>
@@ -239,69 +239,36 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="module-torchjd.aggregation">
-<span id="aggregation"></span><h1>aggregation<a class="headerlink" href="#module-torchjd.aggregation" title="Link to this heading">¶</a></h1>
-<p>When doing Jacobian descent, the Jacobian matrix has to be aggregated into a vector to store in the
-<code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields of the model parameters. The
-The <a class="reference internal" href="#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> is responsible for these
-aggregations.</p>
-<p>When using the <a class="reference internal" href="../autogram/"><span class="doc">autogram</span></a> engine, we rather need to extract a vector
-of weights from the Gramian of the Jacobian. The
-<a class="reference internal" href="#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a> is responsible for this.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Most aggregators rely on computing the Gramian of the Jacobian, extracting a vector of weights
-from this Gramian using a <a class="reference internal" href="#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a>, and then
-combining the rows of the Jacobian using these weights. For all of them, we provide both the
-<a class="reference internal" href="#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> interface (to be used in autojac) and
-the <a class="reference internal" href="#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a> interface (to be used in autogram).
-For the rest, we only provide the <a class="reference internal" href="#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a>
-interface – they are not compatible with autogram.</p>
-</div>
-<p><a class="reference internal" href="#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregators</span></code></a> and <a class="reference internal" href="#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weightings</span></code></a> are callables that take a Jacobian matrix or a
-Gramian matrix as inputs, respectively. The following example shows how to use UPGrad to either
-aggregate a Jacobian or obtain the weights from the Gramian of the Jacobian.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span><span class="p">,</span> <span class="n">UPGradWeighting</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aggregator</span> <span class="o">=</span> <span class="n">UPGrad</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">jacobian</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([[</span><span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aggregation</span> <span class="o">=</span> <span class="n">aggregator</span><span class="p">(</span><span class="n">jacobian</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aggregation</span>
-<span class="go">tensor([0.2929, 1.9004, 1.9004])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">weighting</span> <span class="o">=</span> <span class="n">UPGradWeighting</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gramian</span> <span class="o">=</span> <span class="n">jacobian</span> <span class="o">@</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">T</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span>
-<span class="go">tensor([1.1109, 0.7894])</span>
-</pre></div>
-</div>
-<section id="abstract-base-classes">
-<h2>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Link to this heading">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.Aggregator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Aggregator</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/_aggregator_bases.py#L9-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Aggregator" title="Link to this definition">¶</a></dt>
-<dd><p>Abstract base class for all aggregators. It has the role of aggregating matrices of dimension
-<span class="math notranslate nohighlight">\(m \times n\)</span> into row vectors of dimension <span class="math notranslate nohighlight">\(n\)</span>.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.Weighting">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Weighting</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/_weighting_bases.py#L16-L39"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Weighting" title="Link to this definition">¶</a></dt>
-<dd><p>Abstract base class for all weighting methods. It has the role of extracting a vector of weights
-of dimension <span class="math notranslate nohighlight">\(m\)</span> from some statistic of a matrix of dimension <span class="math notranslate nohighlight">\(m \times n\)</span>,
-generally its Gramian, of dimension <span class="math notranslate nohighlight">\(m \times m\)</span>.</p>
-</dd></dl>
-
+          <section id="module-torchjd.autogram">
+<span id="autogram"></span><h1>autogram<a class="headerlink" href="#module-torchjd.autogram" title="Link to this heading">¶</a></h1>
+<p>The autogram package enables the activation of Gramian-based Jacobian descent on your models (As
+described in Section 6 of <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For Multi-Objective Optimization</a>). It provides a convenient way to modify a model’s backward
+pass, allowing you to seamlessly integrate multi-objective optimization in your PyTorch code.</p>
+<p>This method typically provides a memory improvement over the <a class="reference internal" href="../autojac/"><span class="doc">autojac</span></a>
+package which typically leads to time improvement.</p>
+<p>The exhaustive list of supported Weightings compatible with <cite>autogram</cite> is:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../aggregation/upgrad/#torchjd.aggregation.UPGradWeighting" title="torchjd.aggregation.UPGradWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">UPGradWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/aligned_mtl/#torchjd.aggregation.AlignedMTLWeighting" title="torchjd.aggregation.AlignedMTLWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignedMTLWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/cagrad/#torchjd.aggregation.CAGradWeighting" title="torchjd.aggregation.CAGradWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">CAGradWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/constant/#torchjd.aggregation.ConstantWeighting" title="torchjd.aggregation.ConstantWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConstantWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/dualproj/#torchjd.aggregation.DualProjWeighting" title="torchjd.aggregation.DualProjWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">DualProjWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/imtl_g/#torchjd.aggregation.IMTLGWeighting" title="torchjd.aggregation.IMTLGWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">IMTLGWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/krum/#torchjd.aggregation.KrumWeighting" title="torchjd.aggregation.KrumWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">KrumWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/mean/#torchjd.aggregation.MeanWeighting" title="torchjd.aggregation.MeanWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeanWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/mgda/#torchjd.aggregation.MGDAWeighting" title="torchjd.aggregation.MGDAWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">MGDAWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/pcgrad/#torchjd.aggregation.PCGradWeighting" title="torchjd.aggregation.PCGradWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCGradWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/random/#torchjd.aggregation.RandomWeighting" title="torchjd.aggregation.RandomWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomWeighting</span></code></a></p></li>
+<li><p><a class="reference internal" href="../aggregation/sum/#torchjd.aggregation.SumWeighting" title="torchjd.aggregation.SumWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">SumWeighting</span></code></a></p></li>
+</ul>
 <div class="toctree-wrapper compound">
 </div>
-</section>
 </section>
 
         </article>
@@ -309,23 +276,23 @@ generally its Gramian, of dimension <span class="math notranslate nohighlight">\
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="upgrad/">
+          <a class="next-page" href="engine/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">UPGrad</div>
+                <div class="title">Engine</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../autojac/mtl_backward/">
+          <a class="prev-page" href="../../examples/amp/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">mtl_backward</div>
+                <div class="title">Automatic Mixed Precision (AMP)</div>
                 
               </div>
             </a>
@@ -347,31 +314,8 @@ generally its Gramian, of dimension <span class="math notranslate nohighlight">\
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">aggregation</a><ul>
-<li><a class="reference internal" href="#abstract-base-classes">Abstract base classes</a><ul>
-<li><a class="reference internal" href="#torchjd.aggregation.Aggregator"><code class="docutils literal notranslate"><span class="pre">Aggregator</span></code></a></li>
-<li><a class="reference internal" href="#torchjd.aggregation.Weighting"><code class="docutils literal notranslate"><span class="pre">Weighting</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
@@ -381,7 +325,6 @@ generally its Gramian, of dimension <span class="math notranslate nohighlight">\
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>
     </body>
 </html>

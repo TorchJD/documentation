@@ -4,10 +4,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="mtl_backward" href="../mtl_backward/" /><link rel="prev" title="autojac" href="../" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="autojac" href="../../autojac/" /><link rel="prev" title="autogram" href="../" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.01.29 -->
-        <title>backward - TorchJD</title>
+        <title>Engine - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -40,7 +40,7 @@
     }
   }
 </style>
-    <link rel="canonical" href="https://torchjd.org/stable/docs/autojac/backward.html">
+    <link rel="canonical" href="https://torchjd.org/stable/docs/autogram/engine.html">
     <script src="/version-selector.js"></script>
     <link rel="stylesheet" href="/version-selector.css">
 </head>
@@ -183,13 +183,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../autogram/">autogram</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../autogram/engine/">Engine</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">autogram</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Engine</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../">autojac</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autojac</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">backward</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../mtl_backward/">mtl_backward</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../autojac/">autojac</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autojac</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../autojac/backward/">backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../autojac/mtl_backward/">mtl_backward</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../aggregation/">aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -245,66 +245,104 @@
           </label>
         </div>
         <article role="main">
-          <section id="backward">
-<h1>backward<a class="headerlink" href="#backward" title="Link to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="torchjd.autojac.backward">
-<span class="sig-prename descclassname"><span class="pre">torchjd.autojac.</span></span><span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autojac/_backward.py#L11-L89"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autojac.backward" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the Jacobian of all values in <code class="docutils literal notranslate"><span class="pre">tensors</span></code> with respect to all <code class="docutils literal notranslate"><span class="pre">inputs</span></code>. Computes its
-aggregation by the provided <code class="docutils literal notranslate"><span class="pre">aggregator</span></code> and accumulates it in the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields of the
-<code class="docutils literal notranslate"><span class="pre">inputs</span></code>.</p>
+          <section id="engine">
+<h1>Engine<a class="headerlink" href="#engine" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="torchjd.autogram.Engine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.autogram.</span></span><span class="sig-name descname"><span class="pre">Engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L45-L198"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine" title="Link to this definition">¶</a></dt>
+<dd><p>Used for computing the Gramian of the Jacobian of some vector with respect to the direct
+parameters of all provided modules.</p>
+<p>After this object is constructed, the outputs of the provided modules will have an extended
+computation graph that allows to compute efficiently the Gramian of the Jacobian of the
+per-sample losses with respect to the model parameters.</p>
+<p>This Gramian can then be used to extract weights from this Gramian using the provided
+<code class="docutils literal notranslate"><span class="pre">weighting</span></code> which in turn can be backpropagated for a normal backward pass. This is the
+reverse Gramian accumulation algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tensors</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>] | <a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span>) – The tensor or tensors to differentiate. Should be non-empty. The Jacobian
-matrices will have one row for each value of each of these tensors.</p></li>
-<li><p><strong>aggregator</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../../aggregation/#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a></span>) – Aggregator used to reduce the Jacobian into a vector.</p></li>
-<li><p><strong>inputs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – The tensors with respect to which the Jacobian must be computed. These must have
-their <code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> flag set to <code class="docutils literal notranslate"><span class="pre">True</span></code>. If not provided, defaults to the leaf tensors
-that were used to compute the <code class="docutils literal notranslate"><span class="pre">tensors</span></code> parameter.</p></li>
-<li><p><strong>retain_graph</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph used to compute the grad will be freed. Defaults to
-<code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>parallel_chunk_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – The number of scalars to differentiate simultaneously in the
-backward pass. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, all coordinates of <code class="docutils literal notranslate"><span class="pre">tensors</span></code> will be differentiated in
-parallel at once. If set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, all coordinates will be differentiated sequentially. A
-larger value results in faster differentiation, but also higher memory usage. Defaults to
-<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><strong>modules</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>]</span>) – A collection of modules whose direct (non-recursive) parameters will contribute
+to the Gramian of the Jacobian.</p>
 </dd>
 </dl>
 <div class="admonition-example admonition">
 <p class="admonition-title">Example</p>
-<p>The following code snippet showcases a simple usage of <code class="docutils literal notranslate"><span class="pre">backward</span></code>.</p>
+<p>Train a model using Gramian-based Jacobian descent.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">backward</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGradWeighting</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">param</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Compute arbitrary quantities that are function of param</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span> <span class="o">@</span> <span class="n">param</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data (8 batches of 16 examples of dim 5) for the sake of the example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">backward</span><span class="p">([</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">UPGrad</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">param</span><span class="o">.</span><span class="n">grad</span>
-<span class="go">tensor([0.5000, 2.5000])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">criterion</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weighting</span> <span class="o">=</span> <span class="n">UPGradWeighting</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">modules</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">input</span><span class="p">,</span> <span class="n">target</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">losses</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">gramian</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">compute_gramian</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>  <span class="c1"># shape: [16, 16]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">losses</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of <code class="docutils literal notranslate"><span class="pre">param</span></code> now contains the aggregation of the Jacobian of
-<span class="math notranslate nohighlight">\(\begin{bmatrix}y_1 \\ y_2\end{bmatrix}\)</span> with respect to <code class="docutils literal notranslate"><span class="pre">param</span></code>.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>To differentiate in parallel, <code class="docutils literal notranslate"><span class="pre">backward</span></code> relies on <code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code>, which has some
-limitations: <a class="reference external" href="https://github.com/pytorch/pytorch/issues/138422">it does not work on the output of compiled functions</a>, <a class="reference external" href="https://github.com/TorchJD/torchjd/issues/184">when some tensors have</a> <code class="docutils literal notranslate"><span class="pre">retains_grad=True</span></code> or <a class="reference external" href="https://github.com/TorchJD/torchjd/issues/220">when using an
-RNN on CUDA</a>, for instance. If you
-experience issues with <code class="docutils literal notranslate"><span class="pre">backward</span></code> try to use <code class="docutils literal notranslate"><span class="pre">parallel_chunk_size=1</span></code> to avoid relying on
-<code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code>.</p>
+<p>To use this engine, the modules should respect a few conditions:</p>
+<ul class="simple">
+<li><p>They should treat the elements of the batch independently. Most common layers respect
+this, but for example <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html">BatchNorm</a> does not (it
+computes some average and standard deviation over the elements of the batch).</p></li>
+<li><p>Their inputs and outputs can be any PyTree (tensor, tuple or list of tensors, dict of
+tensors, or any nesting of those structures), but each of these tensors must be batched on
+its first dimension. <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Transformer.html">Transformers</a> and <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.RNN.html">RNNs</a> are thus not
+supported yet. This is only an implementation issue, so it should be fixed soon (please
+open an issue if you need extra focus on this).</p></li>
+<li><p>They should not perform in-place operations on tensors (for instance you should not use
+<code class="docutils literal notranslate"><span class="pre">track_running_stats=True</span></code> in normalization layers).</p></li>
+<li><p>They should not have side-effects during the forward pass (since their forward pass will
+be called twice, the side-effects could be different from what’s expected).</p></li>
+<li><p>If they have some randomness during the forward pass, they should not have direct
+trainable parameters. It is, however, perfectly fine for random modules to have child
+modules that have trainable parameters, so if you have a random module with some direct
+parameters, a simple fix is to wrap these parameters into a child module.</p></li>
+<li><p>For maximum efficiency, they should ideally not contain both direct trainable parameters
+and child modules, especially if those direct trainable parameters are used before the
+child modules. You can always wrap those direct trainable parameters into another child
+module to avoid the slow-down.</p></li>
+</ul>
+<p>If you’re building your own architecture, respecting those criterions should be quite easy.
+However, if you’re using an existing architecture, you may have to modify it to make it
+compatible with the autogram engine. For instance, you may want to replace <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html">BatchNorm2d</a> layers by
+<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.GroupNorm.html">GroupNorm</a> or
+<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.InstanceNorm2d.html">InstanceNorm2d</a> layers.</p>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="torchjd.autogram.Engine.compute_gramian">
+<span class="sig-name descname"><span class="pre">compute_gramian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L163-L172"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine.compute_gramian" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the Gramian of the Jacobian of <code class="docutils literal notranslate"><span class="pre">output</span></code> with respect the direct parameters of all
+<code class="docutils literal notranslate"><span class="pre">modules</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span>) – The vector to differentiate. Must be a 1-D tensor.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -314,12 +352,12 @@ experience issues with <code class="docutils literal notranslate"><span class="p
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../mtl_backward/">
+          <a class="next-page" href="../../autojac/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">mtl_backward</div>
+                <div class="title">autojac</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -330,7 +368,7 @@ experience issues with <code class="docutils literal notranslate"><span class="p
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">autojac</div>
+                <div class="title">autogram</div>
                 
               </div>
             </a>
@@ -363,7 +401,6 @@ experience issues with <code class="docutils literal notranslate"><span class="p
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>
     </body>
 </html>

@@ -172,6 +172,7 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../basic_usage/">Basic Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../monitoring/">Monitoring aggregations</a></li>
@@ -182,10 +183,16 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../docs/autojac/backward/">backward</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../docs/autojac/mtl_backward/">mtl_backward</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/aggregation/">Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/bases/">Aggregator (abstract)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/autogram/">autogram</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autogram/engine/">Engine</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/autojac/">autojac</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autojac</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/backward/">backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/mtl_backward/">mtl_backward</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/aggregation/">aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/upgrad/">UPGrad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/aligned_mtl/">Aligned-MTL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/cagrad/">CAGrad</a></li>
@@ -240,12 +247,12 @@
         <article role="main">
           <section id="pytorch-lightning-integration">
 <h1>PyTorch Lightning Integration<a class="headerlink" href="#pytorch-lightning-integration" title="Link to this heading">¶</a></h1>
-<p>To use Jacobian descent with TorchJD in a <a class="reference external" href="https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.core.LightningModule.html#lightning.pytorch.core.LightningModule" title="(in PyTorch Lightning v2.5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModule</span></code></a>, you need
+<p>To use Jacobian descent with TorchJD in a <a class="reference external" href="https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.core.LightningModule.html#lightning.pytorch.core.LightningModule" title="(in PyTorch Lightning v2.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModule</span></code></a>, you need
 to turn off automatic optimization by setting <code class="docutils literal notranslate"><span class="pre">automatic_optimization</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code> and to
 customize the <code class="docutils literal notranslate"><span class="pre">training_step</span></code> method to make it call the appropriate TorchJD method
 (<a class="reference internal" href="../../docs/autojac/backward/"><span class="doc">backward</span></a> or <a class="reference internal" href="../../docs/autojac/mtl_backward/"><span class="doc">mtl_backward</span></a>).</p>
 <p>The following code example demonstrates a basic multi-task learning setup using a
-<a class="reference external" href="https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.core.LightningModule.html#lightning.pytorch.core.LightningModule" title="(in PyTorch Lightning v2.5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModule</span></code></a> that will call <a class="reference internal" href="../../docs/autojac/mtl_backward/"><span class="doc">mtl_backward</span></a> at each training iteration.</p>
+<a class="reference external" href="https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.core.LightningModule.html#lightning.pytorch.core.LightningModule" title="(in PyTorch Lightning v2.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModule</span></code></a> that will call <a class="reference internal" href="../../docs/autojac/mtl_backward/"><span class="doc">mtl_backward</span></a> at each training iteration.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">lightning</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightningModule</span><span class="p">,</span> <span class="n">Trainer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">lightning.pytorch.utilities.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerLRScheduler</span>
@@ -254,8 +261,8 @@ customize the <code class="docutils literal notranslate"><span class="pre">train
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">Adam</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">TensorDataset</span>
 
-<span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtl_backward</span>
-</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
+<span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
+</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtl_backward</span>
 </span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">LightningModule</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

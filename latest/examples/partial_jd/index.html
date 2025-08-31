@@ -4,10 +4,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Partial Jacobian Descent for IWRM" href="../partial_jd/" /><link rel="prev" title="Basic Usage" href="../basic_usage/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Multi-Task Learning (MTL)" href="../mtl/" /><link rel="prev" title="Instance-Wise Risk Minimization (IWRM)" href="../iwrm/" />
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.01.29 -->
-        <title>Instance-Wise Risk Minimization (IWRM) - TorchJD</title>
+        <title>Partial Jacobian Descent for IWRM - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -40,7 +40,7 @@
     }
   }
 </style>
-    <link rel="canonical" href="https://torchjd.org/stable/examples/iwrm.html">
+    <link rel="canonical" href="https://torchjd.org/stable/examples/partial_jd.html">
     <script src="/version-selector.js"></script>
     <link rel="stylesheet" href="/version-selector.css">
 </head>
@@ -171,8 +171,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../basic_usage/">Basic Usage</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Instance-Wise Risk Minimization (IWRM)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../partial_jd/">Partial Jacobian Descent for IWRM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../monitoring/">Monitoring aggregations</a></li>
@@ -245,150 +245,50 @@
           </label>
         </div>
         <article role="main">
-          <section id="instance-wise-risk-minimization-iwrm">
-<h1>Instance-Wise Risk Minimization (IWRM)<a class="headerlink" href="#instance-wise-risk-minimization-iwrm" title="Link to this heading">¶</a></h1>
-<p>This example shows how to use TorchJD to minimize the vector of per-instance losses. This learning
-paradigm, called IWRM, is multi-objective, as opposed to the usual empirical risk minimization
-(ERM), which seeks to minimize the average loss. While a step of ERM may increase the loss of some
-samples of the batch, a step of IWRM using <a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a> guarantees
-that no loss from the batch is increased (given a sufficiently small learning rate).</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<p>A proper definition of IWRM and its empirical results on some deep learning tasks are
-available in <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For Multi-Objective Optimization</a>.</p>
-</div>
-<p>TorchJD offers two methods to perform IWRM. The <a class="reference internal" href="../../docs/autojac/"><span class="doc">autojac</span></a> engine
-backpropagates the Jacobian of each sample’s loss. It uses an
-<a class="reference internal" href="../../docs/aggregation/"><span class="doc">Aggregator</span></a> to combine the rows of this Jacobian to fill the
-<code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields of the model’s parameters. Because it has to store the full Jacobian, this approach
-uses a lot of memory.</p>
-<p>The recommended approach, called the <a class="reference internal" href="../../docs/autogram/engine/"><span class="doc">autogram engine</span></a>, works by
-backpropagating the Gramian of the Jacobian of each sample’s loss with respect to the model’s
-parameters. This method is more memory-efficient and generally much faster because it avoids
-storing the full Jacobians. A vector of weights is then computed by applying a
-<a class="reference internal" href="../../docs/aggregation/"><span class="doc">Weighting</span></a> to the obtained Gramian, and a normal step of gradient
-descent is then done on the weighted sum of the losses.</p>
-<p>Both approaches (autojac and autogram) are mathematically equivalent, and should thus give the same
-results up to small numerical differences. Even though the autogram engine is generally much faster
-than the autojac engine, there are some layers that are incompatible with it. These limitations are
-documented <a class="reference internal" href="../../docs/autogram/engine/"><span class="doc">here</span></a>.</p>
-<p>For the sake of the example, we generate a fake dataset consisting of 8 batches of 16 random input
-vectors of dimension 10, and their corresponding scalar labels. We train a very simple regression
-model to retrieve the label from the corresponding input. To minimize the average loss (ERM), we use
-stochastic gradient descent (SGD), where each gradient is computed from the average loss over a
-batch of data. When minimizing per-instance losses (IWRM), we use either autojac, with
-<a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a> to aggregate the Jacobian, or autogram, with
-<a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGradWeighting</span></a> to extract weights from the Gramian.</p>
-<div class="sd-tab-set docutils">
-<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-0">
-autograd (baseline)</label><div class="sd-tab-content docutils">
+          <section id="partial-jacobian-descent-for-iwrm">
+<h1>Partial Jacobian Descent for IWRM<a class="headerlink" href="#partial-jacobian-descent-for-iwrm" title="Link to this heading">¶</a></h1>
+<p>This example demonstrates how to perform Partial Jacobian Descent using TorchJD. This technique
+minimizes a vector of per-instance losses by resolving conflict only based on a submatrix of the
+Jacobian — specifically, the portion corresponding to a selected subset of the model’s parameters.
+This approach offers a trade-off between the precision of the aggregation decision and the
+computational cost associated with computing the Gramian of the full Jacobian. For a complete,
+non-partial version, see the <a class="reference internal" href="../iwrm/"><span class="doc">IWRM</span></a> example.</p>
+<p>In this example, our model consists of three <code class="docutils literal notranslate"><span class="pre">Linear</span></code> layers separated by <code class="docutils literal notranslate"><span class="pre">ReLU</span></code> layers. We
+perform the partial descent by considering only the parameters of the last two <code class="docutils literal notranslate"><span class="pre">Linear</span></code> layers. By
+doing this, we avoid computing the Jacobian and its Gramian with respect to the parameters of the
+first <code class="docutils literal notranslate"><span class="pre">Linear</span></code> layer, thereby reducing memory usage and computation time.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
 
-
-
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGradWeighting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
 
+<span class="n">weighting</span> <span class="o">=</span> <span class="n">UPGradWeighting</span><span class="p">()</span>
+
+<span class="hll"><span class="c1"># Create the autogram engine that will compute the Gramian of the</span>
+</span><span class="hll"><span class="c1"># Jacobian with respect to the two last Linear layers&#39; parameters.</span>
+</span><span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">modules</span><span class="p">())</span>
+</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
-
-
 <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
     <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># shape: [] (scalar)</span>
+    <span class="n">losses</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-
-
+    <span class="n">gramian</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">compute_gramian</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>
+    <span class="n">losses</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>In this baseline example, the update may negatively affect the loss of some elements of the
-batch.</p>
-</div>
-<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-1">
-autojac</label><div class="sd-tab-content docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
-
-<span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
-</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">backward</span>
-</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="hll"><span class="n">loss_fn</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-</span>
-<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="hll"><span class="n">aggregator</span> <span class="o">=</span> <span class="n">UPGrad</span><span class="p">()</span>
-</span>
-
-<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-    <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-<span class="hll">    <span class="n">losses</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-</span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-<span class="hll">    <span class="n">backward</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="n">aggregator</span><span class="p">)</span>
-</span>
-
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Here, we compute the Jacobian of the per-sample losses with respect to the model parameters
-and use it to update the model such that no loss from the batch is (locally) increased.</p>
-</div>
-<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-2">
-autogram (recommended)</label><div class="sd-tab-content docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
-
-<span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGradWeighting</span>
-</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
-</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="hll"><span class="n">loss_fn</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-</span>
-<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="hll"><span class="n">weighting</span> <span class="o">=</span> <span class="n">UPGradWeighting</span><span class="p">()</span>
-</span><span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">modules</span><span class="p">())</span>
-</span>
-<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-    <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-<span class="hll">    <span class="n">losses</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-</span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-<span class="hll">    <span class="n">gramian</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">compute_gramian</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>  <span class="c1"># shape: [16, 16]</span>
-</span><span class="hll">    <span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-</span><span class="hll">    <span class="n">losses</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
-</span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Here, the per-sample gradients are never fully stored in memory, leading to large
-improvements in memory usage and speed compared to autojac, in most practical cases. The
-results should be the same as with autojac (up to tiny numerical imprecisions), as long as
-the model always treats each instance independently from other instances in the batch (e.g.
-no batch-normalization is used).</p>
-</div>
-</div>
-<p>Note that in all three cases, we use the <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.optim.SGD.html">torch.optim.SGD</a> optimizer to update the
-parameters of the model in the opposite direction of their <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field. The difference comes
-from how this field is computed.</p>
 </section>
 
         </article>
@@ -396,23 +296,23 @@ from how this field is computed.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../partial_jd/">
+          <a class="next-page" href="../mtl/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Partial Jacobian Descent for IWRM</div>
+                <div class="title">Multi-Task Learning (MTL)</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../basic_usage/">
+          <a class="prev-page" href="../iwrm/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Basic Usage</div>
+                <div class="title">Instance-Wise Risk Minimization (IWRM)</div>
                 
               </div>
             </a>

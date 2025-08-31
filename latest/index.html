@@ -172,6 +172,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="examples/">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/basic_usage/">Basic Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/monitoring/">Monitoring aggregations</a></li>
@@ -182,10 +183,16 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="docs/autojac/backward/">backward</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/autojac/mtl_backward/">mtl_backward</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="docs/aggregation/">Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/aggregation/bases/">Aggregator (abstract)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="docs/autogram/">autogram</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/autogram/engine/">Engine</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="docs/autojac/">autojac</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autojac</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/autojac/backward/">backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/autojac/mtl_backward/">mtl_backward</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="docs/aggregation/">aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/upgrad/">UPGrad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/aligned_mtl/">Aligned-MTL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/cagrad/">CAGrad</a></li>
@@ -254,13 +261,22 @@ optimization. To get started, check out our <a class="reference internal" href="
 <p>Gradient descent relies on gradients to optimize a single objective. Jacobian descent takes this
 idea a step further, using the Jacobian to optimize multiple objectives. An important component of
 Jacobian descent is the aggregator, which maps the Jacobian to an optimization step. In the page
-<a class="reference internal" href="docs/aggregation/"><span class="doc">Aggregation</span></a>, we provide an overview of the various aggregators available
-in TorchJD, along with some of their key characteristics. A precise description of this formalism
-along with the <a class="reference internal" href="docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a> aggregator is available in Section 2 of <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian
-Descent For Multi-Objective Optimization</a>.</p>
+<a class="reference internal" href="docs/aggregation/"><span class="doc">Aggregation</span></a>, we provide an overview of the various aggregators
+available in TorchJD, and their corresponding weightings.</p>
 <p>A straightforward application of Jacobian descent is multi-task learning, in which the vector of
 per-task losses has to be minimized. To start using TorchJD for multi-task learning, follow our
 <a class="reference internal" href="examples/mtl/"><span class="doc">MTL example</span></a>.</p>
+<p>Another more interesting application is to consider separately the loss of each element in the
+batch. This is what we define as <a class="reference internal" href="examples/iwrm/"><span class="doc">Instance-Wise Risk Minimization</span></a> (IWRM).</p>
+<p>For IWRM, in many cases, there exists an algorithm that is both equivalent to Jacobian descent, and
+much more efficient. This algorithm, called Gramian-based Jacobian descent, consists in computing
+the Gramian of the Jacobian iteratively during the backward pass (without ever storing the full
+Jacobian in memory), weighting the losses using the information of the Gramian, and then computing
+the gradient of the obtained weighted loss. The iterative computation of the Gramian corresponds to
+Algorithm 3 of
+<a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For Multi-Objective Optimization</a>. The
+documentation and usage example of this algorithm is provided in
+<a class="reference internal" href="docs/autogram/engine/"><span class="doc">autogram.Engine</span></a>.</p>
 <p>TorchJD is open-source, under MIT License. The source code is available on
 <a class="reference external" href="https://github.com/TorchJD/torchjd">GitHub</a>.</p>
 <div class="toctree-wrapper compound">

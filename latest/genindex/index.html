@@ -170,6 +170,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples/">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/basic_usage/">Basic Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/monitoring/">Monitoring aggregations</a></li>
@@ -180,10 +181,16 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../docs/autojac/backward/">backward</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../docs/autojac/mtl_backward/">mtl_backward</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/aggregation/">Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/bases/">Aggregator (abstract)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/autogram/">autogram</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/autogram/engine/">Engine</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/autojac/">autojac</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autojac</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/autojac/backward/">backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/autojac/mtl_backward/">mtl_backward</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/aggregation/">aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/upgrad/">UPGrad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/aligned_mtl/">Aligned-MTL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/cagrad/">CAGrad</a></li>
@@ -238,17 +245,19 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#K"><strong>K</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#K"><strong>K</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#W"><strong>W</strong></a></div>
 </section>
 <section id="A" class="genindex-section">
   <h2>A</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="../docs/aggregation/bases/#torchjd.aggregation.Aggregator">Aggregator (class in torchjd.aggregation)</a>
+        <li><a href="../docs/aggregation/#torchjd.aggregation.Aggregator">Aggregator (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../docs/aggregation/aligned_mtl/#torchjd.aggregation.AlignedMTL">AlignedMTL (class in torchjd.aggregation)</a>
+</li>
+        <li><a href="../docs/aggregation/aligned_mtl/#torchjd.aggregation.AlignedMTLWeighting">AlignedMTLWeighting (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -258,7 +267,7 @@
   <h2>B</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="../docs/autojac/backward/#torchjd.backward">backward() (in module torchjd)</a>
+        <li><a href="../docs/autojac/backward/#torchjd.autojac.backward">backward() (in module torchjd.autojac)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -270,11 +279,17 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../docs/aggregation/cagrad/#torchjd.aggregation.CAGrad">CAGrad (class in torchjd.aggregation)</a>
 </li>
+        <li><a href="../docs/aggregation/cagrad/#torchjd.aggregation.CAGradWeighting">CAGradWeighting (class in torchjd.aggregation)</a>
+</li>
+        <li><a href="../docs/autogram/engine/#torchjd.autogram.Engine.compute_gramian">compute_gramian() (torchjd.autogram.Engine method)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../docs/aggregation/config/#torchjd.aggregation.ConFIG">ConFIG (class in torchjd.aggregation)</a>
 </li>
         <li><a href="../docs/aggregation/constant/#torchjd.aggregation.Constant">Constant (class in torchjd.aggregation)</a>
+</li>
+        <li><a href="../docs/aggregation/constant/#torchjd.aggregation.ConstantWeighting">ConstantWeighting (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -285,6 +300,20 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../docs/aggregation/dualproj/#torchjd.aggregation.DualProj">DualProj (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/dualproj/#torchjd.aggregation.DualProjWeighting">DualProjWeighting (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/autogram/engine/#torchjd.autogram.Engine">Engine (class in torchjd.autogram)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -307,6 +336,10 @@
         <li><a href="../docs/aggregation/imtl_g/#torchjd.aggregation.IMTLG">IMTLG (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/imtl_g/#torchjd.aggregation.IMTLGWeighting">IMTLGWeighting (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -315,6 +348,10 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../docs/aggregation/krum/#torchjd.aggregation.Krum">Krum (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/krum/#torchjd.aggregation.KrumWeighting">KrumWeighting (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -326,11 +363,26 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../docs/aggregation/mean/#torchjd.aggregation.Mean">Mean (class in torchjd.aggregation)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/mean/#torchjd.aggregation.MeanWeighting">MeanWeighting (class in torchjd.aggregation)</a>
+</li>
         <li><a href="../docs/aggregation/mgda/#torchjd.aggregation.MGDA">MGDA (class in torchjd.aggregation)</a>
 </li>
-        <li><a href="../docs/autojac/mtl_backward/#torchjd.mtl_backward">mtl_backward() (in module torchjd)</a>
+        <li><a href="../docs/aggregation/mgda/#torchjd.aggregation.MGDAWeighting">MGDAWeighting (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    module
+
+        <ul>
+          <li><a href="../docs/aggregation/#module-torchjd.aggregation">torchjd.aggregation</a>
+</li>
+          <li><a href="../docs/autogram/#module-torchjd.autogram">torchjd.autogram</a>
+</li>
+          <li><a href="../docs/autojac/#module-torchjd.autojac">torchjd.autojac</a>
+</li>
+        </ul></li>
+        <li><a href="../docs/autojac/mtl_backward/#torchjd.autojac.mtl_backward">mtl_backward() (in module torchjd.autojac)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -353,6 +405,10 @@
         <li><a href="../docs/aggregation/pcgrad/#torchjd.aggregation.PCGrad">PCGrad (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/pcgrad/#torchjd.aggregation.PCGradWeighting">PCGradWeighting (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -364,6 +420,8 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/random/#torchjd.aggregation.RandomWeighting">RandomWeighting (class in torchjd.aggregation)</a>
+</li>
         <li><a href="../docs/aggregation/nash_mtl/#torchjd.aggregation.NashMTL.reset">reset() (torchjd.aggregation.NashMTL method)</a>
 </li>
     </ul></td>
@@ -377,6 +435,10 @@
         <li><a href="../docs/aggregation/sum/#torchjd.aggregation.Sum">Sum (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/sum/#torchjd.aggregation.SumWeighting">SumWeighting (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -384,6 +446,29 @@
   <h2>T</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    torchjd.aggregation
+
+        <ul>
+          <li><a href="../docs/aggregation/#module-torchjd.aggregation">module</a>
+</li>
+        </ul></li>
+        <li>
+    torchjd.autogram
+
+        <ul>
+          <li><a href="../docs/autogram/#module-torchjd.autogram">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    torchjd.autojac
+
+        <ul>
+          <li><a href="../docs/autojac/#module-torchjd.autojac">module</a>
+</li>
+        </ul></li>
         <li><a href="../docs/aggregation/trimmed_mean/#torchjd.aggregation.TrimmedMean">TrimmedMean (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
@@ -395,6 +480,20 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../docs/aggregation/upgrad/#torchjd.aggregation.UPGrad">UPGrad (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/upgrad/#torchjd.aggregation.UPGradWeighting">UPGradWeighting (class in torchjd.aggregation)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../docs/aggregation/#torchjd.aggregation.Weighting">Weighting (class in torchjd.aggregation)</a>
 </li>
     </ul></td>
   </tr></table>

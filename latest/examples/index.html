@@ -172,6 +172,7 @@
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage/">Basic Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mtl/">Multi-Task Learning (MTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monitoring/">Monitoring aggregations</a></li>
@@ -182,10 +183,16 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../docs/autojac/backward/">backward</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../docs/autojac/mtl_backward/">mtl_backward</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/aggregation/">Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/bases/">Aggregator (abstract)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/autogram/">autogram</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autogram</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/autogram/engine/">Engine</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/autojac/">autojac</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autojac</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/autojac/backward/">backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/autojac/mtl_backward/">mtl_backward</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/aggregation/">aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of aggregation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/upgrad/">UPGrad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/aligned_mtl/">Aligned-MTL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docs/aggregation/cagrad/">CAGrad</a></li>
@@ -247,6 +254,11 @@
 vector of per-instance losses, using stochastic sub-Jacobian descent (SSJD). It is compared to the
 usual minimization of the average loss, called empirical risk minimization (ERM), using stochastic
 gradient descent (SGD).</p></li>
+<li><p><a class="reference internal" href="partial_jd/"><span class="doc">Partial Jacobian Descent for IWRM</span></a> provides an example in which we minimize the
+vector of per-instance losses using stochastic sub-Jacobian descent, similar to our <a class="reference internal" href="iwrm/"><span class="doc">IWRM</span></a>
+example. However, this method bases the aggregation decision on the Jacobian of the losses with respect
+to <strong>only a subset</strong> of the model’s parameters, offering a trade-off between computational cost and
+aggregation precision.</p></li>
 <li><p><a class="reference internal" href="mtl/"><span class="doc">Multi-Task Learning (MTL)</span></a> provides an example of multi-task learning where Jacobian
 descent is used to optimize the vector of per-task losses of a multi-task model, using the
 dedicated backpropagation function <a class="reference internal" href="../docs/autojac/mtl_backward/"><span class="doc">mtl_backward</span></a>.</p></li>
