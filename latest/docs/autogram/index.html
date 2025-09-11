@@ -247,12 +247,15 @@
         <article role="main">
           <section id="module-torchjd.autogram">
 <span id="autogram"></span><h1>autogram<a class="headerlink" href="#module-torchjd.autogram" title="Link to this heading">¶</a></h1>
-<p>The autogram package enables the activation of Gramian-based Jacobian descent on your models (As
-described in Section 6 of <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For Multi-Objective Optimization</a>). It provides a convenient way to modify a model’s backward
-pass, allowing you to seamlessly integrate multi-objective optimization in your PyTorch code.</p>
-<p>This method typically provides a memory improvement over the <a class="reference internal" href="../autojac/"><span class="doc">autojac</span></a>
-package which typically leads to time improvement.</p>
-<p>The exhaustive list of supported Weightings compatible with <cite>autogram</cite> is:</p>
+<p>The autogram package provides an engine to efficiently compute the Gramian of the Jacobian of a
+tensor of outputs (generally losses) with respect to some modules’ parameters. This Gramian contains
+all the inner products between pairs of gradients, and is thus a sufficient statistic for most
+weighting methods. The algorithm is formally defined in Section 6 of <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For
+Multi-Objective Optimization</a>).</p>
+<p>Due to computing the Gramian iteratively over the layers, without ever having to store the full
+Jacobian in memory, this method is much more memory-efficient than
+<a class="reference internal" href="../autojac/"><span class="doc">autojac</span></a>, which makes it often much faster.</p>
+<p>The list of Weightings compatible with <code class="docutils literal notranslate"><span class="pre">autogram</span></code> is:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../aggregation/upgrad/#torchjd.aggregation.UPGradWeighting" title="torchjd.aggregation.UPGradWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">UPGradWeighting</span></code></a></p></li>
 <li><p><a class="reference internal" href="../aggregation/aligned_mtl/#torchjd.aggregation.AlignedMTLWeighting" title="torchjd.aggregation.AlignedMTLWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignedMTLWeighting</span></code></a></p></li>
