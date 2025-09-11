@@ -249,8 +249,7 @@
 <span id="aggregation"></span><h1>aggregation<a class="headerlink" href="#module-torchjd.aggregation" title="Link to this heading">¶</a></h1>
 <p>When doing Jacobian descent, the Jacobian matrix has to be aggregated into a vector to store in the
 <code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields of the model parameters. The
-The <a class="reference internal" href="#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> is responsible for these
-aggregations.</p>
+<a class="reference internal" href="#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> is responsible for these aggregations.</p>
 <p>When using the <a class="reference internal" href="../autogram/"><span class="doc">autogram</span></a> engine, we rather need to extract a vector
 of weights from the Gramian of the Jacobian. The
 <a class="reference internal" href="#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a> is responsible for this.</p>
