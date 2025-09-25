@@ -4,10 +4,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="DualProj" href="../dualproj/" /><link rel="prev" title="ConFIG" href="../config/" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="GradDrop" href="../graddrop/" /><link rel="prev" title="DualProj" href="../dualproj/" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.01.29 -->
-        <title>Constant - TorchJD</title>
+        <title>Flattening - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -40,7 +40,7 @@
     }
   }
 </style>
-    <link rel="canonical" href="https://torchjd.org/stable/docs/aggregation/constant.html">
+    <link rel="canonical" href="https://torchjd.org/stable/docs/aggregation/flattening.html">
     <script src="/version-selector.js"></script>
     <link rel="stylesheet" href="/version-selector.css">
 </head>
@@ -198,9 +198,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../aligned_mtl/">Aligned-MTL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cagrad/">CAGrad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config/">ConFIG</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Constant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../constant/">Constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dualproj/">DualProj</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../flattening/">Flattening</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Flattening</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../graddrop/">GradDrop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imtl_g/">IMTL-G</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../krum/">Krum</a></li>
@@ -247,28 +247,22 @@
           </label>
         </div>
         <article role="main">
-          <section id="constant">
-<h1>Constant<a class="headerlink" href="#constant" title="Link to this heading">¶</a></h1>
+          <section id="flattening">
+<h1>Flattening<a class="headerlink" href="#flattening" title="Link to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.Constant">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/_constant.py#L8-L25"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Constant" title="Link to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="../#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> that makes a linear combination of
-the rows of the provided matrix, with constant, pre-determined weights.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>weights</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span>) – The weights associated to the rows of the input matrices.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.ConstantWeighting">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">ConstantWeighting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/_constant.py#L28-L55"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.ConstantWeighting" title="Link to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="../#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a> that returns constant, pre-determined
+<dt class="sig sig-object py" id="torchjd.aggregation.Flattening">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Flattening</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weighting</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/_flattening.py#L9-L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Flattening" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../#torchjd.aggregation.GeneralizedWeighting" title="torchjd.aggregation._weighting_bases.GeneralizedWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneralizedWeighting</span></code></a> flattening the generalized
+Gramian into a square matrix, extracting a vector of weights from it using a
+<a class="reference internal" href="../#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a>, and returning the reshaped tensor of
 weights.</p>
+<p>For instance, when applied to a generalized Gramian of shape <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">3,</span> <span class="pre">2]</span></code>, it would flatten
+it into a square Gramian matrix of shape <code class="docutils literal notranslate"><span class="pre">[6,</span> <span class="pre">6]</span></code>, apply the weighting on it to get a vector
+of weights of shape <code class="docutils literal notranslate"><span class="pre">[6]</span></code>, and then return this vector reshaped into a matrix of shape
+<code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">3]</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>weights</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span>) – The weights to return at each call.</p>
+<dd class="field-odd"><p><strong>weighting</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</span>) – The weighting to apply to the Gramian matrix.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -280,23 +274,23 @@ weights.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../dualproj/">
+          <a class="next-page" href="../graddrop/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">DualProj</div>
+                <div class="title">GradDrop</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../config/">
+          <a class="prev-page" href="../dualproj/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">ConFIG</div>
+                <div class="title">DualProj</div>
                 
               </div>
             </a>

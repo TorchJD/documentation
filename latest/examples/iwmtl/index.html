@@ -4,10 +4,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Instance-Wise Risk Minimization (IWRM)" href="../iwrm/" /><link rel="prev" title="Examples" href="../" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Recurrent Neural Network (RNN)" href="../rnn/" /><link rel="prev" title="Multi-Task Learning (MTL)" href="../mtl/" />
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"/><!-- Generated with Sphinx 7.4.7 and Furo 2024.01.29 -->
-        <title>Basic Usage - TorchJD</title>
+        <title>Instance-Wise Multi-Task Learning (IWMTL) - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -40,7 +40,7 @@
     }
   }
 </style>
-    <link rel="canonical" href="https://torchjd.org/stable/examples/basic_usage.html">
+    <link rel="canonical" href="https://torchjd.org/stable/examples/iwmtl.html">
     <script src="/version-selector.js"></script>
     <link rel="stylesheet" href="/version-selector.css">
 </head>
@@ -170,11 +170,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage/">Basic Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mtl/">Multi-Task Learning (MTL)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../iwmtl/">Instance-Wise Multi-Task Learning (IWMTL)</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Instance-Wise Multi-Task Learning (IWMTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lightning_integration/">PyTorch Lightning Integration</a></li>
@@ -247,65 +247,68 @@
           </label>
         </div>
         <article role="main">
-          <section id="basic-usage">
-<h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h1>
-<p>This example shows how to use TorchJD to perform an iteration of Jacobian descent on a regression
-model with two objectives. In this example, a batch of inputs is forwarded through the model and two
-corresponding batches of labels are used to compute two losses. These losses are then backwarded
-through the model. The obtained Jacobian matrix, consisting of the gradients of the two losses with
-respect to the parameters, is then aggregated using <a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a>, and
-the parameters are updated using the resulting aggregation.</p>
-<p>Import several classes from <code class="docutils literal notranslate"><span class="pre">torch</span></code> and <code class="docutils literal notranslate"><span class="pre">torchjd</span></code>:</p>
+          <section id="instance-wise-multi-task-learning-iwmtl">
+<h1>Instance-Wise Multi-Task Learning (IWMTL)<a class="headerlink" href="#instance-wise-multi-task-learning-iwmtl" title="Link to this heading">¶</a></h1>
+<p>When training a model with multiple tasks, the gradients of the individual tasks are likely to
+conflict. This is particularly true when looking at the individual (per-sample) gradients.
+The <a class="reference internal" href="../../docs/autogram/engine/"><span class="doc">autogram engine</span></a> can be used to efficiently compute the Gramian
+of the Jacobian of the matrix of per-sample and per-task losses. Weights can then be extracted from
+this Gramian to reweight the gradients and resolve conflict entirely.</p>
+<p>The following example shows how to do that.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd</span><span class="w"> </span><span class="kn">import</span> <span class="n">autojac</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
+<span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flattening</span><span class="p">,</span> <span class="n">UPGradWeighting</span>
+</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
+</span>
+<span class="n">shared_module</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">())</span>
+<span class="n">task1_module</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">task2_module</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="o">*</span><span class="n">shared_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+    <span class="o">*</span><span class="n">task1_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+    <span class="o">*</span><span class="n">task2_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+<span class="p">]</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="hll"><span class="n">mse</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+</span><span class="hll"><span class="n">weighting</span> <span class="o">=</span> <span class="n">Flattening</span><span class="p">(</span><span class="n">UPGradWeighting</span><span class="p">())</span>
+</span><span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">shared_module</span><span class="o">.</span><span class="n">modules</span><span class="p">(),</span> <span class="n">batch_dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 8 batches of 16 random input vectors of length 10</span>
+<span class="n">task1_targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 8 batches of 16 targets for the first task</span>
+<span class="n">task2_targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 8 batches of 16 targets for the second task</span>
+
+<span class="k">for</span> <span class="nb">input</span><span class="p">,</span> <span class="n">target1</span><span class="p">,</span> <span class="n">target2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">task1_targets</span><span class="p">,</span> <span class="n">task2_targets</span><span class="p">):</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">shared_module</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>  <span class="c1"># shape: [16, 3]</span>
+    <span class="n">out1</span> <span class="o">=</span> <span class="n">task1_module</span><span class="p">(</span><span class="n">features</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+    <span class="n">out2</span> <span class="o">=</span> <span class="n">task2_module</span><span class="p">(</span><span class="n">features</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+
+<span class="hll">    <span class="c1"># Compute the matrix of losses: one loss per element of the batch and per task</span>
+</span><span class="hll">    <span class="n">losses</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">mse</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span> <span class="n">target1</span><span class="p">),</span> <span class="n">mse</span><span class="p">(</span><span class="n">out2</span><span class="p">,</span> <span class="n">target2</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16, 2]</span>
+</span>
+<span class="hll">    <span class="c1"># Compute the gramian (inner products between pairs of gradients of the losses)</span>
+</span><span class="hll">    <span class="n">gramian</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">compute_gramian</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>  <span class="c1"># shape: [16, 2, 2, 16]</span>
+</span>
+<span class="hll">    <span class="c1"># Obtain the weights that lead to no conflict between reweighted gradients</span>
+</span><span class="hll">    <span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>  <span class="c1"># shape: [16, 2]</span>
+</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="hll">    <span class="c1"># Do the standard backward pass, but weighted using the obtained weights</span>
+</span><span class="hll">    <span class="n">losses</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Define the model and the optimizer, as usual:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-</pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example, the tensor of losses is a matrix rather than a vector. The gramian is thus a
+4D tensor rather than a matrix, and a
+<a class="reference internal" href="../../docs/aggregation/#torchjd.aggregation.GeneralizedWeighting" title="torchjd.aggregation._weighting_bases.GeneralizedWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneralizedWeighting</span></code></a>, such as
+<a class="reference internal" href="../../docs/aggregation/flattening/#torchjd.aggregation.Flattening" title="torchjd.aggregation._flattening.Flattening"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flattening</span></code></a>, has to be used to extract a matrix of
+weights from it. More information about <code class="docutils literal notranslate"><span class="pre">GeneralizedWeighting</span></code> can be found in the
+<a class="reference internal" href="../../docs/aggregation/"><span class="doc">aggregation</span></a> page.</p>
 </div>
-<p>Define the aggregator that will be used to combine the Jacobian matrix:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aggregator</span> <span class="o">=</span> <span class="n">UPGrad</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>In essence, <a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a> projects each gradient onto the dual cone of
-the rows of the Jacobian and averages the results. This ensures that locally, no loss will be
-negatively affected by the update.</p>
-<p>Now that everything is defined, we can train the model. Define the input and the associated target:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># Batch of 16 random input vectors of length 10</span>
-<span class="n">target1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>  <span class="c1"># First batch of 16 targets</span>
-<span class="n">target2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>  <span class="c1"># Second batch of 16 targets</span>
-</pre></div>
-</div>
-<p>Here, we generate fake inputs and labels for the sake of the example.</p>
-<p>We can now compute the losses associated to each element of the batch.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loss_fn</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">()</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
-<span class="n">loss1</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">target1</span><span class="p">)</span>
-<span class="n">loss2</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">target2</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The last steps are similar to gradient descent-based optimization, but using the two losses.</p>
-<p>Reset the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of each model parameter:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Perform the Jacobian descent backward pass:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">autojac</span><span class="o">.</span><span class="n">backward</span><span class="p">([</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">aggregator</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This will populate the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of each model parameter with the corresponding aggregated
-Jacobian matrix.</p>
-<p>Update each parameter based on its <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field, using the <code class="docutils literal notranslate"><span class="pre">optimizer</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>The model’s parameters have been updated!</p>
 </section>
 
         </article>
@@ -313,23 +316,23 @@ Jacobian matrix.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../iwrm/">
+          <a class="next-page" href="../rnn/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Instance-Wise Risk Minimization (IWRM)</div>
+                <div class="title">Recurrent Neural Network (RNN)</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../">
+          <a class="prev-page" href="../mtl/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Examples</div>
+                <div class="title">Multi-Task Learning (MTL)</div>
                 
               </div>
             </a>

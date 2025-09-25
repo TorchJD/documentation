@@ -174,6 +174,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../examples/iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples/partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples/mtl/">Multi-Task Learning (MTL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/iwmtl/">Instance-Wise Multi-Task Learning (IWMTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples/rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples/monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples/lightning_integration/">PyTorch Lightning Integration</a></li>
@@ -199,6 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="config/">ConFIG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constant/">Constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dualproj/">DualProj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flattening/">Flattening</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graddrop/">GradDrop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imtl_g/">IMTL-G</a></li>
 <li class="toctree-l2"><a class="reference internal" href="krum/">Krum</a></li>
@@ -265,7 +267,8 @@ interface – they are not compatible with autogram.</p>
 </div>
 <p><a class="reference internal" href="#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregators</span></code></a> and <a class="reference internal" href="#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weightings</span></code></a> are callables that take a Jacobian matrix or a
 Gramian matrix as inputs, respectively. The following example shows how to use UPGrad to either
-aggregate a Jacobian or obtain the weights from the Gramian of the Jacobian.</p>
+aggregate a Jacobian (of shape <code class="docutils literal notranslate"><span class="pre">[m,</span> <span class="pre">n]</span></code>, where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of objectives and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the
+number of parameters), or obtain the weights from the Gramian of the Jacobian (of shape <code class="docutils literal notranslate"><span class="pre">[m,</span> <span class="pre">m]</span></code>).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span><span class="p">,</span> <span class="n">UPGradWeighting</span>
 <span class="gp">&gt;&gt;&gt;</span>
@@ -279,6 +282,28 @@ aggregate a Jacobian or obtain the weights from the Gramian of the Jacobian.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span>
 <span class="go">tensor([1.1109, 0.7894])</span>
+</pre></div>
+</div>
+<p>When dealing with a more general tensor of objectives, of shape <code class="docutils literal notranslate"><span class="pre">[m_1,</span> <span class="pre">...,</span> <span class="pre">m_k]</span></code> (i.e. not
+necessarily a simple vector), the Jacobian will be of shape <code class="docutils literal notranslate"><span class="pre">[m_1,</span> <span class="pre">...,</span> <span class="pre">m_k,</span> <span class="pre">n]</span></code>, and its Gramian
+will be called a <cite>generalized Gramian</cite>, of shape <code class="docutils literal notranslate"><span class="pre">[m_1,</span> <span class="pre">...,</span> <span class="pre">m_k,</span> <span class="pre">m_k,</span> <span class="pre">...,</span> <span class="pre">m_1]</span></code>. One can use a
+<a class="reference internal" href="#torchjd.aggregation.GeneralizedWeighting" title="torchjd.aggregation._weighting_bases.GeneralizedWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneralizedWeighting</span></code></a> to extract
+a tensor of weights (of shape <code class="docutils literal notranslate"><span class="pre">[m_1,</span> <span class="pre">...,</span> <span class="pre">m_k]</span></code>) from such a generalized Gramian. The simplest
+<a class="reference internal" href="#torchjd.aggregation.GeneralizedWeighting" title="torchjd.aggregation._weighting_bases.GeneralizedWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneralizedWeighting</span></code></a> is
+<a class="reference internal" href="flattening/#torchjd.aggregation.Flattening" title="torchjd.aggregation._flattening.Flattening"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flattening</span></code></a>: it simply “flattens” the
+generalized Gramian into a square Gramian matrix (of shape <code class="docutils literal notranslate"><span class="pre">[m_1</span> <span class="pre">*</span> <span class="pre">...</span> <span class="pre">*</span> <span class="pre">m_k,</span> <span class="pre">m_1</span> <span class="pre">*</span> <span class="pre">...</span> <span class="pre">*</span> <span class="pre">m_k]</span></code>),
+applies a normal weighting to it to obtain a vector of weights, and returns the reshaped tensor of
+weights.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">ones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flattening</span><span class="p">,</span> <span class="n">UPGradWeighting</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weighting</span> <span class="o">=</span> <span class="n">Flattening</span><span class="p">(</span><span class="n">UPGradWeighting</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate a generalized Gramian filled with ones, for the sake of the example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">generalized_gramian</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">generalized_gramian</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span>
+<span class="go">tensor([[0.1667, 0.1667, 0.1667],</span>
+<span class="go">        [0.1667, 0.1667, 0.1667]])</span>
 </pre></div>
 </div>
 <section id="abstract-base-classes">
@@ -296,6 +321,15 @@ aggregate a Jacobian or obtain the weights from the Gramian of the Jacobian.</p>
 <dd><p>Abstract base class for all weighting methods. It has the role of extracting a vector of weights
 of dimension <span class="math notranslate nohighlight">\(m\)</span> from some statistic of a matrix of dimension <span class="math notranslate nohighlight">\(m \times n\)</span>,
 generally its Gramian, of dimension <span class="math notranslate nohighlight">\(m \times m\)</span>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torchjd.aggregation.GeneralizedWeighting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">GeneralizedWeighting</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/aggregation/_weighting_bases.py#L57-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.GeneralizedWeighting" title="Link to this definition">¶</a></dt>
+<dd><p>Abstract base class for all weightings that operate on generalized Gramians. It has the role of
+extracting a tensor of weights of dimension <span class="math notranslate nohighlight">\(m_1 \times \dots \times m_k\)</span> from a
+generalized Gramian of dimension
+<span class="math notranslate nohighlight">\(m_1 \times \dots \times m_k \times m_k \times \dots \times m_1\)</span>.</p>
 </dd></dl>
 
 <div class="toctree-wrapper compound">
@@ -362,6 +396,7 @@ generally its Gramian, of dimension <span class="math notranslate nohighlight">\
 <li><a class="reference internal" href="#abstract-base-classes">Abstract base classes</a><ul>
 <li><a class="reference internal" href="#torchjd.aggregation.Aggregator"><code class="docutils literal notranslate"><span class="pre">Aggregator</span></code></a></li>
 <li><a class="reference internal" href="#torchjd.aggregation.Weighting"><code class="docutils literal notranslate"><span class="pre">Weighting</span></code></a></li>
+<li><a class="reference internal" href="#torchjd.aggregation.GeneralizedWeighting"><code class="docutils literal notranslate"><span class="pre">GeneralizedWeighting</span></code></a></li>
 </ul>
 </li>
 </ul>

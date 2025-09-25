@@ -174,6 +174,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/mtl/">Multi-Task Learning (MTL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/iwmtl/">Instance-Wise Multi-Task Learning (IWMTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/lightning_integration/">PyTorch Lightning Integration</a></li>
@@ -199,6 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../aggregation/config/">ConFIG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../aggregation/constant/">Constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../aggregation/dualproj/">DualProj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/flattening/">Flattening</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../aggregation/graddrop/">GradDrop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../aggregation/imtl_g/">IMTL-G</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../aggregation/krum/">Krum</a></li>
@@ -249,57 +251,76 @@
 <h1>Engine<a class="headerlink" href="#engine" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchjd.autogram.Engine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.autogram.</span></span><span class="sig-name descname"><span class="pre">Engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L45-L202"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine" title="Link to this definition">¶</a></dt>
-<dd><p>Used for computing the Gramian of the Jacobian of some vector with respect to the direct
-parameters of all provided modules.</p>
-<p>After this object is constructed, the outputs of the provided modules will have an extended
-computation graph that allows to compute efficiently the Gramian of the Jacobian of the
-per-sample losses with respect to the model parameters.</p>
-<p>This Gramian can then be used to extract weights from this Gramian using the provided
-<code class="docutils literal notranslate"><span class="pre">weighting</span></code> which in turn can be backpropagated for a normal backward pass. This is the
-reverse Gramian accumulation algorithm.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.autogram.</span></span><span class="sig-name descname"><span class="pre">Engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_dim</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L46-L301"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine" title="Link to this definition">¶</a></dt>
+<dd><p>Engine to compute the Gramian of the Jacobian of some tensor with respect to the direct
+parameters of all provided modules. It is based on Algorithm 3 of <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For
+Multi-Objective Optimization</a> but goes even further:</p>
+<ul class="simple">
+<li><p>It works for any computation graph (not just sequential models).</p></li>
+<li><p>It is optimized for batched computations (as long as <code class="docutils literal notranslate"><span class="pre">batch_dim</span></code> is specified).</p></li>
+<li><p>It supports any shape of tensor to differentiate (not just a vector of losses). For more
+details about this, look at <a class="reference internal" href="#torchjd.autogram.Engine.compute_gramian" title="torchjd.autogram.Engine.compute_gramian"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Engine.compute_gramian()</span></code></a>.</p></li>
+</ul>
+<p>As explained in Section 6 of <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For Multi-Objective Optimization</a>, most <a class="reference internal" href="../../aggregation/#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregators</span></code></a> combine the rows of the Jacobian using some
+weights that depend only on the Gramian of the Jacobian. Because of that, the typical usage of
+the autogram engine is to directly compute this Gramian, extract weights from it (with a
+<a class="reference internal" href="../../aggregation/#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a>), and use those weights to
+backpropagate the losses. This is equivalent to doing a step of standard Jacobian descent using
+<a class="reference internal" href="../../autojac/backward/#torchjd.autojac.backward" title="torchjd.autojac.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">torchjd.autojac.backward()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>modules</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>]</span>) – A collection of modules whose direct (non-recursive) parameters will contribute
-to the Gramian of the Jacobian.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>modules</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>]</span>) – A collection of modules whose direct (non-recursive) parameters will contribute
+to the Gramian of the Jacobian.</p></li>
+<li><p><strong>batch_dim</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – If the modules work with batches and process each batch element independently,
+then many intermediary Jacobians are sparse (block-diagonal), which allows for a substantial
+memory optimization by backpropagating a squashed Jacobian instead. This parameter indicates
+the batch dimension of the output tensor, if any.</p></li>
+</ul>
 </dd>
 </dl>
 <div class="admonition-example admonition">
 <p class="admonition-title">Example</p>
 <p>Train a model using Gramian-based Jacobian descent.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGradWeighting</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data (8 batches of 16 examples of dim 5) for the sake of the example</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">criterion</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">weighting</span> <span class="o">=</span> <span class="n">UPGradWeighting</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">modules</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">input</span><span class="p">,</span> <span class="n">target</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">losses</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">gramian</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">compute_gramian</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>  <span class="c1"># shape: [16, 16]</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">losses</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">MSELoss</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">,</span> <span class="n">Sequential</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
+
+<span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGradWeighting</span>
+</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
+</span>
+<span class="c1"># Generate data (8 batches of 16 examples of dim 5) for the sake of the example</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">ReLU</span><span class="p">(),</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+
+<span class="hll"><span class="n">criterion</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>  <span class="c1"># Important to use reduction=&quot;none&quot;</span>
+</span><span class="hll"><span class="n">weighting</span> <span class="o">=</span> <span class="n">UPGradWeighting</span><span class="p">()</span>
+</span>
+<span class="hll"><span class="c1"># Create the engine before the backward pass, and only once.</span>
+</span><span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">modules</span><span class="p">(),</span> <span class="n">batch_dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span>
+<span class="k">for</span> <span class="nb">input</span><span class="p">,</span> <span class="n">target</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+    <span class="n">losses</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="hll">    <span class="n">gramian</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">compute_gramian</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>  <span class="c1"># shape: [16, 16]</span>
+</span><span class="hll">    <span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
+</span><span class="hll">    <span class="n">losses</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>This is equivalent to just calling <code class="docutils literal notranslate"><span class="pre">torchjd.autojac.backward(losses,</span> <span class="pre">UPGrad())</span></code>. However,
+since the Jacobian never has to be entirely in memory, it is often much more
+memory-efficient, and thus typically faster, to use the Gramian-based approach.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>To use this engine, the modules should respect a few conditions:</p>
+<p>When providing a non-None <code class="docutils literal notranslate"><span class="pre">batch_dim</span></code>, all provided modules must respect a few
+conditions:</p>
 <ul class="simple">
 <li><p>They should treat the elements of the batch independently. Most common layers respect
 this, but for example <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html">BatchNorm</a> does not (it
@@ -311,36 +332,66 @@ supported yet. This is only an implementation issue, so it should be fixed soon 
 open an issue if you need extra focus on this).</p></li>
 <li><p>They should not perform in-place operations on tensors (for instance you should not use
 <code class="docutils literal notranslate"><span class="pre">track_running_stats=True</span></code> in normalization layers).</p></li>
-<li><p>They should not have side-effects during the forward pass (since their forward pass will
-be called twice, the side-effects could be different from what’s expected).</p></li>
+<li><p>They should not have side effects during the forward pass (since their forward pass will
+be called twice, the side effects could be different from what’s expected).</p></li>
 <li><p>If they have some randomness during the forward pass, they should not have direct
 trainable parameters. It is, however, perfectly fine for random modules to have child
 modules that have trainable parameters, so if you have a random module with some direct
 parameters, a simple fix is to wrap these parameters into a child module.</p></li>
-<li><p>For maximum efficiency, they should ideally not contain both direct trainable parameters
-and child modules, especially if those direct trainable parameters are used before the
-child modules. You can always wrap those direct trainable parameters into another child
-module to avoid the slow-down.</p></li>
 </ul>
-<p>If you’re building your own architecture, respecting those criterions should be quite easy.
+<p>If you’re building your own architecture, respecting those criteria should be quite easy.
 However, if you’re using an existing architecture, you may have to modify it to make it
 compatible with the autogram engine. For instance, you may want to replace <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html">BatchNorm2d</a> layers by
 <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.GroupNorm.html">GroupNorm</a> or
 <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.InstanceNorm2d.html">InstanceNorm2d</a> layers.</p>
+<p>The alternative is to use <code class="docutils literal notranslate"><span class="pre">batch_dim=None</span></code>, but it’s not recommended since it will
+increase memory usage by a lot and thus typically slow down computation.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For maximum efficiency, modules should ideally not contain both direct trainable
+parameters and child modules, especially if those direct trainable parameters are used
+before the child modules. You can always wrap those direct trainable parameters into
+another child module to avoid the slow-down.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchjd.autogram.Engine.compute_gramian">
-<span class="sig-name descname"><span class="pre">compute_gramian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L163-L183"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine.compute_gramian" title="Link to this definition">¶</a></dt>
-<dd><p>Compute the Gramian of the Jacobian of <code class="docutils literal notranslate"><span class="pre">output</span></code> with respect the direct parameters of all
-<code class="docutils literal notranslate"><span class="pre">modules</span></code>.</p>
+<span class="sig-name descname"><span class="pre">compute_gramian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L201-L270"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine.compute_gramian" title="Link to this definition">¶</a></dt>
+<dd><p>Computes the Gramian of the Jacobian of <code class="docutils literal notranslate"><span class="pre">output</span></code> with respect to the direct parameters of
+all <code class="docutils literal notranslate"><span class="pre">modules</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>output</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span>) – The vector to differentiate. Must be a 1-D tensor.</p>
+<dd class="field-odd"><p><strong>output</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span>) – The tensor of arbitrary shape to differentiate. The shape of the returned
+Gramian depends on the shape of this output.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function doesn’t require <code class="docutils literal notranslate"><span class="pre">output</span></code> to be a vector. For example, if <code class="docutils literal notranslate"><span class="pre">output</span></code> is
+a matrix of shape <span class="math notranslate nohighlight">\([m_1, m_2]\)</span>, its Jacobian <span class="math notranslate nohighlight">\(J\)</span> with respect to the
+parameters will be of shape <span class="math notranslate nohighlight">\([m_1, m_2, n]\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of
+parameters in the model. This is what we call a <cite>generalized Jacobian</cite>. The
+corresponding Gramian <span class="math notranslate nohighlight">\(G = J J^\top\)</span> will be of shape
+<span class="math notranslate nohighlight">\([m_1, m_2, m_2, m_1]\)</span>. This is what we call a <cite>generalized Gramian</cite>. The number
+of dimensions of the returned generalized Gramian will always be twice that of the
+<code class="docutils literal notranslate"><span class="pre">output</span></code>.</p>
+<dl class="simple">
+<dt>A few examples:</dt><dd><ul class="simple">
+<li><p>0D (scalar) <code class="docutils literal notranslate"><span class="pre">output</span></code>: 0D Gramian (this can be used to efficiently compute the
+squared norm of the gradient of <code class="docutils literal notranslate"><span class="pre">output</span></code>).</p></li>
+<li><p>1D (vector) <code class="docutils literal notranslate"><span class="pre">output</span></code>: 2D Gramian (this is the standard setting of Jacobian
+descent).</p></li>
+<li><p>2D (matrix) <code class="docutils literal notranslate"><span class="pre">output</span></code>: 4D Gramian (this can be used for <a class="reference internal" href="../../../examples/iwmtl/"><span class="doc">Instance-Wise
+Multi-Task Learning (IWMTL)</span></a>, as each sample in the batch
+has one loss per task).</p></li>
+<li><p>etc.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -401,6 +452,7 @@ compatible with the autogram engine. For instance, you may want to replace <a cl
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>
     </body>
 </html>

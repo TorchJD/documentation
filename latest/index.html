@@ -174,6 +174,7 @@
 <li class="toctree-l2"><a class="reference internal" href="examples/iwrm/">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/mtl/">Multi-Task Learning (MTL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/iwmtl/">Instance-Wise Multi-Task Learning (IWMTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/lightning_integration/">PyTorch Lightning Integration</a></li>
@@ -199,6 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/config/">ConFIG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/constant/">Constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/dualproj/">DualProj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/aggregation/flattening/">Flattening</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/graddrop/">GradDrop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/imtl_g/">IMTL-G</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/aggregation/krum/">Krum</a></li>
@@ -268,8 +270,8 @@ per-task losses has to be minimized. To start using TorchJD for multi-task learn
 <a class="reference internal" href="examples/mtl/"><span class="doc">MTL example</span></a>.</p>
 <p>Another more interesting application is to consider separately the loss of each element in the
 batch. This is what we define as <a class="reference internal" href="examples/iwrm/"><span class="doc">Instance-Wise Risk Minimization</span></a> (IWRM).</p>
-<p>For IWRM, in many cases, there exists an algorithm that is both equivalent to Jacobian descent, and
-much more efficient. This algorithm, called Gramian-based Jacobian descent, consists in computing
+<p>The Gramian-based Jacobian descent algorithm provides a very efficient alternative way of
+performing Jacobian descent. It consists in computing
 the Gramian of the Jacobian iteratively during the backward pass (without ever storing the full
 Jacobian in memory), weighting the losses using the information of the Gramian, and then computing
 the gradient of the obtained weighted loss. The iterative computation of the Gramian corresponds to
@@ -277,6 +279,10 @@ Algorithm 3 of
 <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For Multi-Objective Optimization</a>. The
 documentation and usage example of this algorithm is provided in
 <a class="reference internal" href="docs/autogram/engine/"><span class="doc">autogram.Engine</span></a>.</p>
+<p>The original usage of the autogram engine is to compute the Gramian of the Jacobian very efficiently
+for <a class="reference internal" href="examples/iwrm/"><span class="doc">IWRM</span></a>. Another direct application is when considering one loss per element
+of the batch and per task, in the context of multi-task learning. We call this
+<a class="reference internal" href="examples/iwmtl/"><span class="doc">Instance-Wise Risk Multi-Task Learning</span></a> (IWMTL).</p>
 <p>TorchJD is open-source, under MIT License. The source code is available on
 <a class="reference external" href="https://github.com/TorchJD/torchjd">GitHub</a>.</p>
 <div class="toctree-wrapper compound">

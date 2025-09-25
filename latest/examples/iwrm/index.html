@@ -174,6 +174,7 @@
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Instance-Wise Risk Minimization (IWRM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../partial_jd/">Partial Jacobian Descent for IWRM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../mtl/">Multi-Task Learning (MTL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../iwmtl/">Instance-Wise Multi-Task Learning (IWMTL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../rnn/">Recurrent Neural Network (RNN)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../monitoring/">Monitoring aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lightning_integration/">PyTorch Lightning Integration</a></li>
@@ -199,6 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/config/">ConFIG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/constant/">Constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/dualproj/">DualProj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/flattening/">Flattening</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/graddrop/">GradDrop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/imtl_g/">IMTL-G</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/aggregation/krum/">Krum</a></li>
@@ -367,7 +369,7 @@ autogram (recommended)</label><div class="sd-tab-content docutils">
 <span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="hll"><span class="n">weighting</span> <span class="o">=</span> <span class="n">UPGradWeighting</span><span class="p">()</span>
-</span><span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">modules</span><span class="p">())</span>
+</span><span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">modules</span><span class="p">(),</span> <span class="n">batch_dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span>
 <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
     <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: [16]</span>
