@@ -251,7 +251,7 @@
 <h1>Engine<a class="headerlink" href="#engine" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchjd.autogram.Engine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.autogram.</span></span><span class="sig-name descname"><span class="pre">Engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_dim</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L46-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.autogram.</span></span><span class="sig-name descname"><span class="pre">Engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_dim</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L46-L323"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine" title="Link to this definition">¶</a></dt>
 <dd><p>Engine to compute the Gramian of the Jacobian of some tensor with respect to the direct
 parameters of all provided modules. It is based on Algorithm 3 of <a class="reference external" href="https://arxiv.org/pdf/2406.16232">Jacobian Descent For
 Multi-Objective Optimization</a> but goes even further:</p>
@@ -319,24 +319,29 @@ memory-efficient, and thus typically faster, to use the Gramian-based approach.<
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>When providing a non-None <code class="docutils literal notranslate"><span class="pre">batch_dim</span></code>, all provided modules must respect a few
-conditions:</p>
+<p>When providing a non-None <code class="docutils literal notranslate"><span class="pre">batch_dim</span></code>, all provided modules must respect a few conditions:</p>
 <ul class="simple">
 <li><p>They should treat the elements of the batch independently. Most common layers respect
 this, but for example <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html">BatchNorm</a> does not (it
 computes some average and standard deviation over the elements of the batch).</p></li>
 <li><p>Their inputs and outputs can be anything, but each input tensor and each output tensor
-must be batched on its first dimension. <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Transformer.html">Transformers</a> and <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.RNN.html">RNNs</a> are thus not
-supported yet. This is only an implementation issue, so it should be fixed soon (please
-open an issue if you need extra focus on this).</p></li>
+must be batched on its first dimension. When available (e.g. in <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Transformer.html">Transformers</a>,
+<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.MultiheadAttention.html">MultiheadAttention</a>,
+etc.), the <code class="docutils literal notranslate"><span class="pre">batch_first</span></code> parameter has to be set to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Also, this makes <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.RNN.html">RNNs</a> not supported yet
+because their hidden state is batched on dimension 1 even if <code class="docutils literal notranslate"><span class="pre">batch_first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p>They should not perform in-place operations on tensors (for instance you should not use
 <code class="docutils literal notranslate"><span class="pre">track_running_stats=True</span></code> in normalization layers).</p></li>
 <li><p>They should not have side effects during the forward pass (since their forward pass will
 be called twice, the side effects could be different from what’s expected).</p></li>
 <li><p>If they have some randomness during the forward pass, they should not have direct
-trainable parameters. It is, however, perfectly fine for random modules to have child
-modules that have trainable parameters, so if you have a random module with some direct
-parameters, a simple fix is to wrap these parameters into a child module.</p></li>
+trainable parameters. For this reason,
+<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Transformer.html">Transformers</a>, which use a
+dropout function (rather than a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Dropout.html">Dropout</a> layer) in a
+module with some trainable parameters, has to be used with
+<code class="docutils literal notranslate"><span class="pre">dropout=0.0</span></code>. Note that a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Dropout.html">Dropout</a> layers are
+entirely supported and should be preferred. It is also perfectly fine for random modules
+to have child modules that have trainable parameters, so if you have a random module with
+some direct parameters, a simple fix is to wrap these parameters into a child module.</p></li>
 </ul>
 <p>If you’re building your own architecture, respecting those criteria should be quite easy.
 However, if you’re using an existing architecture, you may have to modify it to make it
@@ -371,7 +376,7 @@ another child module to avoid the slow-down.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchjd.autogram.Engine.compute_gramian">
-<span class="sig-name descname"><span class="pre">compute_gramian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L214-L283"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine.compute_gramian" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">compute_gramian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/main/src/torchjd/autogram/_engine.py#L223-L292"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autogram.Engine.compute_gramian" title="Link to this definition">¶</a></dt>
 <dd><p>Computes the Gramian of the Jacobian of <code class="docutils literal notranslate"><span class="pre">output</span></code> with respect to the direct parameters of
 all <code class="docutils literal notranslate"><span class="pre">modules</span></code>.</p>
 <dl class="field-list simple">
