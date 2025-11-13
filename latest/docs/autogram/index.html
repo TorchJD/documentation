@@ -298,7 +298,9 @@ weighting methods. The algorithm is formally defined in Section 6 of <a class="r
 Multi-Objective Optimization</a>).</p>
 <p>Due to computing the Gramian iteratively over the layers, without ever having to store the full
 Jacobian in memory, this method is much more memory-efficient than
-<a class="reference internal" href="../autojac/"><span class="doc">autojac</span></a>, which makes it often much faster.</p>
+<a class="reference internal" href="../autojac/"><span class="doc">autojac</span></a>, which makes it often much faster. Note that we’re still working
+on making autogram faster and more memory-efficient, and it’s interface may change in future
+releases.</p>
 <p>The list of Weightings compatible with <code class="docutils literal notranslate"><span class="pre">autogram</span></code> is:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../aggregation/upgrad/#torchjd.aggregation.UPGradWeighting" title="torchjd.aggregation.UPGradWeighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">UPGradWeighting</span></code></a></p></li>
