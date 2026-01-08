@@ -312,9 +312,9 @@ descent can be leveraged to enhance optimization.</p>
     <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>  <span class="c1"># output is of shape [5, 3, 20].</span>
 <span class="hll">    <span class="n">losses</span> <span class="o">=</span> <span class="p">((</span><span class="n">output</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># 1 loss per sequence element.</span>
 </span>
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 <span class="hll">    <span class="n">backward</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="n">aggregator</span><span class="p">,</span> <span class="n">parallel_chunk_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="admonition note">

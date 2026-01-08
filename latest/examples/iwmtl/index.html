@@ -336,10 +336,10 @@ this Gramian to reweight the gradients and resolve conflict entirely.</p>
 <span class="hll">    <span class="c1"># Obtain the weights that lead to no conflict between reweighted gradients</span>
 </span><span class="hll">    <span class="n">weights</span> <span class="o">=</span> <span class="n">weighting</span><span class="p">(</span><span class="n">gramian</span><span class="p">)</span>  <span class="c1"># shape: [16, 2]</span>
 </span>
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 <span class="hll">    <span class="c1"># Do the standard backward pass, but weighted using the obtained weights</span>
 </span><span class="hll">    <span class="n">losses</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="admonition note">

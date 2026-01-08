@@ -335,9 +335,9 @@ vectors of dimension 10, and their corresponding scalar labels for both tasks.</
     <span class="n">loss1</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="n">target1</span><span class="p">)</span>
     <span class="n">loss2</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output2</span><span class="p">,</span> <span class="n">target2</span><span class="p">)</span>
 
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 <span class="hll">    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">losses</span><span class="o">=</span><span class="p">[</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">aggregator</span><span class="o">=</span><span class="n">aggregator</span><span class="p">)</span>
 </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="admonition note">

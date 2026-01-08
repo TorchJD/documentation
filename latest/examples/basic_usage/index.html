@@ -333,10 +333,6 @@ negatively affected by the update.</p>
 </pre></div>
 </div>
 <p>The last steps are similar to gradient descent-based optimization, but using the two losses.</p>
-<p>Reset the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of each model parameter:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-</pre></div>
-</div>
 <p>Perform the Jacobian descent backward pass:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">autojac</span><span class="o">.</span><span class="n">backward</span><span class="p">([</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">aggregator</span><span class="p">)</span>
 </pre></div>
@@ -348,6 +344,10 @@ Jacobian matrix.</p>
 </pre></div>
 </div>
 <p>The model’s parameters have been updated!</p>
+<p>As usual, you should now reset the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of each model parameter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 
         </article>
