@@ -229,6 +229,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/autojac/">autojac</a><input aria-label="Toggle navigation of autojac" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/backward/">backward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/mtl_backward/">mtl_backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/jac_to_grad/">jac_to_grad</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/aggregation/">aggregation</a><input aria-label="Toggle navigation of aggregation" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -308,7 +309,7 @@ they have a negative inner product).</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtl_backward</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtl_backward</span><span class="p">,</span> <span class="n">jac_to_grad</span>
 
 <span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">print_weights</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Prints the extracted weights.&quot;&quot;&quot;</span>
@@ -348,7 +349,8 @@ they have a negative inner product).</p>
     <span class="n">loss1</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="n">target1</span><span class="p">)</span>
     <span class="n">loss2</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output2</span><span class="p">,</span> <span class="n">target2</span><span class="p">)</span>
 
-    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">losses</span><span class="o">=</span><span class="p">[</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">aggregator</span><span class="o">=</span><span class="n">aggregator</span><span class="p">)</span>
+    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">losses</span><span class="o">=</span><span class="p">[</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+    <span class="n">jac_to_grad</span><span class="p">(</span><span class="n">shared_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">aggregator</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
