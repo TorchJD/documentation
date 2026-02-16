@@ -323,7 +323,7 @@ descent can be leveraged to enhance optimization.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>At the time of writing, there seems to be an incompatibility between <code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code> and
-<code class="docutils literal notranslate"><span class="pre">torch.nn.RNN</span></code> when running on CUDA (see <a class="reference external" href="https://github.com/TorchJD/torchjd/issues/220">this issue</a> for more info), so we advise to set the
+<code class="docutils literal notranslate"><span class="pre">torch.nn.RNN</span></code> when running on CUDA (see <a class="reference external" href="https://github.com/SimplexLab/TorchJD/issues/220">this issue</a> for more info), so we advise to set the
 <code class="docutils literal notranslate"><span class="pre">parallel_chunk_size</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code> to avoid using <code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code>. To improve performance, you can
 check whether <code class="docutils literal notranslate"><span class="pre">parallel_chunk_size=None</span></code> (maximal parallelization) works on your side.</p>
 </div>
