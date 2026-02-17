@@ -350,7 +350,7 @@ they have a negative inner product).</p>
     <span class="n">loss1</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="n">target1</span><span class="p">)</span>
     <span class="n">loss2</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output2</span><span class="p">,</span> <span class="n">target2</span><span class="p">)</span>
 
-    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">losses</span><span class="o">=</span><span class="p">[</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">tensors</span><span class="o">=</span><span class="p">[</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
     <span class="n">jac_to_grad</span><span class="p">(</span><span class="n">shared_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">aggregator</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
