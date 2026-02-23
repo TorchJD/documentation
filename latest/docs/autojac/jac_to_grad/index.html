@@ -295,7 +295,7 @@
 <h1>jac_to_grad<a class="headerlink" href="#jac-to-grad" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchjd.autojac.jac_to_grad">
-<span class="sig-prename descclassname"><span class="pre">torchjd.autojac.</span></span><span class="sig-name descname"><span class="pre">jac_to_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensors</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregator</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_jac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/SimplexLab/TorchJD/blob/main/src/torchjd/autojac/_jac_to_grad.py#L12-L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autojac.jac_to_grad" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">torchjd.autojac.</span></span><span class="sig-name descname"><span class="pre">jac_to_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensors</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregator</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_jac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/SimplexLab/TorchJD/blob/main/src/torchjd/autojac/_jac_to_grad.py#L35-L129"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autojac.jac_to_grad" title="Link to this definition">¶</a></dt>
 <dd><p>Aggregates the Jacobians stored in the <code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields of <code class="docutils literal notranslate"><span class="pre">tensors</span></code> and accumulates the result
 into their <code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields.</p>
 <dl class="field-list simple">
@@ -303,13 +303,15 @@ into their <code class="docutils literal notranslate"><span class="pre">.grad</s
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tensors</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</span>) – The tensors whose <code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields should be aggregated. All Jacobians must
 have the same first dimension (e.g. number of losses).</p></li>
-<li><p><strong>aggregator</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../../aggregation/#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a></span>) – The aggregator used to reduce the Jacobians into gradients.</p></li>
+<li><p><strong>aggregator</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../../aggregation/#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a></span>) – The aggregator used to reduce the Jacobians into gradients. If it uses a
+<a class="reference internal" href="../../aggregation/#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a> to combine the rows of
+the Jacobians, <code class="docutils literal notranslate"><span class="pre">jac_to_grad</span></code> will also return the computed weights.</p></li>
 <li><p><strong>retain_jac</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to preserve the <code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields of the tensors after they have been
 used. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -333,13 +335,16 @@ gradient vector, that is split and reshaped to fit into the <code class="docutil
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">backward</span><span class="p">([</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">])</span>  <span class="c1"># param now has a .jac field</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">jac_to_grad</span><span class="p">([</span><span class="n">param</span><span class="p">],</span> <span class="n">aggregator</span><span class="o">=</span><span class="n">UPGrad</span><span class="p">())</span>  <span class="c1"># param now has a .grad field</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">jac_to_grad</span><span class="p">([</span><span class="n">param</span><span class="p">],</span> <span class="n">UPGrad</span><span class="p">())</span>  <span class="c1"># param now has a .grad field</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">param</span><span class="o">.</span><span class="n">grad</span>
-<span class="go">tensor([-1.,  1.])</span>
+<span class="go">tensor([0.5000, 2.5000])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span>
+<span class="go">tensor([0.5,  0.5])</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of <code class="docutils literal notranslate"><span class="pre">param</span></code> now contains the aggregation (by UPGrad) of the Jacobian of
-<span class="math notranslate nohighlight">\(\begin{bmatrix}y_1 \\ y_2\end{bmatrix}\)</span> with respect to <code class="docutils literal notranslate"><span class="pre">param</span></code>.</p>
+<span class="math notranslate nohighlight">\(\begin{bmatrix}y_1 \\ y_2\end{bmatrix}\)</span> with respect to <code class="docutils literal notranslate"><span class="pre">param</span></code>. In this case, the
+weights used to combine the Jacobian are equal because there was no conflict.</p>
 </div>
 </dd></dl>
 
