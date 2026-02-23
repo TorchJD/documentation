@@ -8,7 +8,7 @@
         <link rel="prefetch" href="../../_static/logo-light-mode.png" as="image">
         <link rel="prefetch" href="../../_static/logo-dark-mode.png" as="image">
 
-    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Recurrent Neural Network (RNN) - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -229,6 +229,8 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/autojac/">autojac</a><input aria-label="Toggle navigation of autojac" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/backward/">backward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/mtl_backward/">mtl_backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/jac/">jac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/jac_to_grad/">jac_to_grad</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/aggregation/">aggregation</a><input aria-label="Toggle navigation of aggregation" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -299,7 +301,7 @@ descent can be leveraged to enhance optimization.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
 
 <span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
-</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">backward</span>
+</span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">backward</span><span class="p">,</span> <span class="n">jac_to_grad</span>
 </span>
 <span class="n">rnn</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">rnn</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -312,15 +314,16 @@ descent can be leveraged to enhance optimization.</p>
     <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>  <span class="c1"># output is of shape [5, 3, 20].</span>
 <span class="hll">    <span class="n">losses</span> <span class="o">=</span> <span class="p">((</span><span class="n">output</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># 1 loss per sequence element.</span>
 </span>
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-<span class="hll">    <span class="n">backward</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="n">aggregator</span><span class="p">,</span> <span class="n">parallel_chunk_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="hll">    <span class="n">backward</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="n">parallel_chunk_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">jac_to_grad</span><span class="p">(</span><span class="n">rnn</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">aggregator</span><span class="p">)</span>
 </span>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>At the time of writing, there seems to be an incompatibility between <code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code> and
-<code class="docutils literal notranslate"><span class="pre">torch.nn.RNN</span></code> when running on CUDA (see <a class="reference external" href="https://github.com/TorchJD/torchjd/issues/220">this issue</a> for more info), so we advise to set the
+<code class="docutils literal notranslate"><span class="pre">torch.nn.RNN</span></code> when running on CUDA (see <a class="reference external" href="https://github.com/SimplexLab/TorchJD/issues/220">this issue</a> for more info), so we advise to set the
 <code class="docutils literal notranslate"><span class="pre">parallel_chunk_size</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code> to avoid using <code class="docutils literal notranslate"><span class="pre">torch.vmap</span></code>. To improve performance, you can
 check whether <code class="docutils literal notranslate"><span class="pre">parallel_chunk_size=None</span></code> (maximal parallelization) works on your side.</p>
 </div>
@@ -375,9 +378,9 @@ check whether <code class="docutils literal notranslate"><span class="pre">paral
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=1ec50272"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="../../_static/documentation_options.js?v=9341aaf2"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>

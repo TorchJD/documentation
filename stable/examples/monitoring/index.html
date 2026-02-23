@@ -8,7 +8,7 @@
         <link rel="prefetch" href="../../_static/logo-light-mode.png" as="image">
         <link rel="prefetch" href="../../_static/logo-dark-mode.png" as="image">
 
-    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Monitoring aggregations - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -229,6 +229,8 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/autojac/">autojac</a><input aria-label="Toggle navigation of autojac" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/backward/">backward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/mtl_backward/">mtl_backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/jac/">jac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/jac_to_grad/">jac_to_grad</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/aggregation/">aggregation</a><input aria-label="Toggle navigation of aggregation" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -291,7 +293,7 @@
         <article role="main" id="furo-main-content">
           <section id="monitoring-aggregations">
 <h1>Monitoring aggregations<a class="headerlink" href="#monitoring-aggregations" title="Link to this heading">¶</a></h1>
-<p>The <a class="reference internal" href="../../docs/aggregation/"><span class="doc">Aggregator</span></a> class is a subclass of <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>.
+<p>The <a class="reference internal" href="../../docs/aggregation/"><span class="doc">Aggregator</span></a> class is a subclass of <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>.
 This allows registering hooks, which can be used to monitor some information about aggregations.
 The following code example demonstrates registering a hook to compute and print the cosine
 similarity between the aggregation performed by <a class="reference internal" href="../../docs/aggregation/upgrad/"><span class="doc">UPGrad</span></a> and the
@@ -308,7 +310,7 @@ they have a negative inner product).</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtl_backward</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtl_backward</span><span class="p">,</span> <span class="n">jac_to_grad</span>
 
 <span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">print_weights</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Prints the extracted weights.&quot;&quot;&quot;</span>
@@ -334,7 +336,7 @@ they have a negative inner product).</p>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">aggregator</span> <span class="o">=</span> <span class="n">UPGrad</span><span class="p">()</span>
 
-<span class="hll"><span class="n">aggregator</span><span class="o">.</span><span class="n">weighting</span><span class="o">.</span><span class="n">weighting</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">print_weights</span><span class="p">)</span>
+<span class="hll"><span class="n">aggregator</span><span class="o">.</span><span class="n">gramian_weighting</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">print_weights</span><span class="p">)</span>
 </span><span class="hll"><span class="n">aggregator</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">print_gd_similarity</span><span class="p">)</span>
 </span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 8 batches of 16 random input vectors of length 10</span>
@@ -348,9 +350,10 @@ they have a negative inner product).</p>
     <span class="n">loss1</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="n">target1</span><span class="p">)</span>
     <span class="n">loss2</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">output2</span><span class="p">,</span> <span class="n">target2</span><span class="p">)</span>
 
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-    <span class="n">mtl_backward</span><span class="p">(</span><span class="n">losses</span><span class="o">=</span><span class="p">[</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">aggregator</span><span class="o">=</span><span class="n">aggregator</span><span class="p">)</span>
+    <span class="n">mtl_backward</span><span class="p">([</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+    <span class="n">jac_to_grad</span><span class="p">(</span><span class="n">shared_module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">aggregator</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -404,9 +407,9 @@ they have a negative inner product).</p>
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=1ec50272"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="../../_static/documentation_options.js?v=9341aaf2"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>

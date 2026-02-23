@@ -4,12 +4,12 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="prev" title="Sum" href="../sum/">
+<link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="next" title="aggregation" href="../../aggregation/"><link rel="prev" title="jac" href="../jac/">
         <link rel="prefetch" href="../../../_static/logo-light-mode.png" as="image">
         <link rel="prefetch" href="../../../_static/logo-dark-mode.png" as="image">
 
     <link rel="shortcut icon" href="../../../_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Trimmed Mean - TorchJD</title>
+        <title>jac_to_grad - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -42,7 +42,7 @@
     }
   }
 </style>
-    <link rel="canonical" href="https://torchjd.org/stable/docs/aggregation/trimmed_mean.html">
+    <link rel="canonical" href="https://torchjd.org/stable/docs/autojac/jac_to_grad.html">
     <script src="/version-selector.js"></script>
     <link rel="stylesheet" href="/version-selector.css">
 </head>
@@ -226,31 +226,31 @@
 <li class="toctree-l2"><a class="reference internal" href="../../autogram/engine/">Engine</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../autojac/">autojac</a><input aria-label="Toggle navigation of autojac" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../autojac/backward/">backward</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../autojac/mtl_backward/">mtl_backward</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../autojac/jac/">jac</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../autojac/jac_to_grad/">jac_to_grad</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">autojac</a><input aria-label="Toggle navigation of autojac" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../backward/">backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mtl_backward/">mtl_backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jac/">jac</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">jac_to_grad</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../">aggregation</a><input aria-label="Toggle navigation of aggregation" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../upgrad/">UPGrad</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../aligned_mtl/">Aligned-MTL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cagrad/">CAGrad</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../config/">ConFIG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../constant/">Constant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../dualproj/">DualProj</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../flattening/">Flattening</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../graddrop/">GradDrop</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../imtl_g/">IMTL-G</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../krum/">Krum</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../mean/">Mean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../mgda/">MGDA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../nash_mtl/">Nash-MTL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../pcgrad/">PCGrad</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../random/">Random</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sum/">Sum</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Trimmed Mean</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../aggregation/">aggregation</a><input aria-label="Toggle navigation of aggregation" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/upgrad/">UPGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/aligned_mtl/">Aligned-MTL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/cagrad/">CAGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/config/">ConFIG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/constant/">Constant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/dualproj/">DualProj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/flattening/">Flattening</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/graddrop/">GradDrop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/imtl_g/">IMTL-G</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/krum/">Krum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/mean/">Mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/mgda/">MGDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/nash_mtl/">Nash-MTL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/pcgrad/">PCGrad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/random/">Random</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/sum/">Sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../aggregation/trimmed_mean/">Trimmed Mean</a></li>
 </ul>
 </li>
 </ul>
@@ -273,7 +273,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../../_sources/docs/aggregation/trimmed_mean.rst.txt" title="View this page">
+  <a class="muted-link" href="../../../_sources/docs/autojac/jac_to_grad.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -291,20 +291,77 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="trimmed-mean">
-<h1>Trimmed Mean<a class="headerlink" href="#trimmed-mean" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="torchjd.aggregation.TrimmedMean">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">TrimmedMean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trim_number</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/SimplexLab/TorchJD/blob/v0.9.0/src/torchjd/aggregation/_trimmed_mean.py#L7-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.TrimmedMean" title="Link to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="../#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a> for adversarial federated learning,
-that trims the most extreme values of the input matrix, before averaging its rows, as defined in
-<a class="reference external" href="https://proceedings.mlr.press/v80/yin18a/yin18a.pdf">Byzantine-Robust Distributed Learning: Towards Optimal Statistical Rates</a>.</p>
+          <section id="jac-to-grad">
+<h1>jac_to_grad<a class="headerlink" href="#jac-to-grad" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="torchjd.autojac.jac_to_grad">
+<span class="sig-prename descclassname"><span class="pre">torchjd.autojac.</span></span><span class="sig-name descname"><span class="pre">jac_to_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensors</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregator</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_jac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_gramian_computation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/SimplexLab/TorchJD/blob/v0.9.0/src/torchjd/autojac/_jac_to_grad.py#L47-L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.autojac.jac_to_grad" title="Link to this definition">¶</a></dt>
+<dd><p>Aggregates the Jacobians stored in the <code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields of <code class="docutils literal notranslate"><span class="pre">tensors</span></code> and accumulates the result
+into their <code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trim_number</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The number of maximum and minimum values to remove from each column of the
-input matrix (note that <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">trim_number</span></code> values are removed from each column).</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensors</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</span>) – The tensors whose <code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields should be aggregated. All Jacobians must
+have the same first dimension (e.g. number of losses).</p></li>
+<li><p><strong>aggregator</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../../aggregation/#torchjd.aggregation.Aggregator" title="torchjd.aggregation._aggregator_bases.Aggregator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregator</span></code></a></span>) – The aggregator used to reduce the Jacobians into gradients. If it uses a
+<a class="reference internal" href="../../aggregation/#torchjd.aggregation.Weighting" title="torchjd.aggregation._weighting_bases.Weighting"><code class="xref py py-class docutils literal notranslate"><span class="pre">Weighting</span></code></a> to combine the rows of
+the Jacobians, <code class="docutils literal notranslate"><span class="pre">jac_to_grad</span></code> will also return the computed weights.</p></li>
+<li><p><strong>retain_jac</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to preserve the <code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields of the tensors after they have been
+used. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>optimize_gramian_computation</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – When the <code class="docutils literal notranslate"><span class="pre">aggregator</span></code> computes weights based on the
+Gramian of the Jacobian, it’s possible to skip the concatenation of the Jacobians and to
+instead compute the Gramian as the sum of the Gramians of the individual Jacobians. This
+saves memory (up to 50% memory saving) but can be slightly slower (up to 15%) on CUDA. We
+advise to try this optimization if memory is an issue for you. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">optimize_gramian_computation=False</span></code>, this function starts by “flattening” the
+<code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields into matrices (i.e. flattening all of their dimensions except the first
+one), then concatenates those matrices into a combined Jacobian matrix. The <code class="docutils literal notranslate"><span class="pre">aggregator</span></code>
+is then used on this matrix, which returns a combined gradient vector, that is split and
+reshaped to fit into the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> fields of the tensors.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">optimize_gramian_computation=True</span></code>, this function computes and sums the Gramian
+of each individual <code class="docutils literal notranslate"><span class="pre">.jac</span></code> field, iteratively. The inner weighting of the <code class="docutils literal notranslate"><span class="pre">aggregator</span></code> is
+then used to extract some weights from the obtained Gramian, used to compute a linear
+combination of the rows of each <code class="docutils literal notranslate"><span class="pre">.jac</span></code> field, to be stored into the corresponding
+<code class="docutils literal notranslate"><span class="pre">.grad</span></code> field. This is mathematically equivalent to the approach with
+<code class="docutils literal notranslate"><span class="pre">optimize_gramian_computation=False</span></code>, but saves memory by not having to hold the
+concatenated Jacobian matrix in memory at any time.</p>
+</div>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>This example shows how to use <code class="docutils literal notranslate"><span class="pre">jac_to_grad</span></code> after a call to <code class="docutils literal notranslate"><span class="pre">backward</span></code></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">backward</span><span class="p">,</span> <span class="n">jac_to_grad</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">param</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Compute arbitrary quantities that are function of param</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span> <span class="o">@</span> <span class="n">param</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">backward</span><span class="p">([</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">])</span>  <span class="c1"># param now has a .jac field</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">jac_to_grad</span><span class="p">([</span><span class="n">param</span><span class="p">],</span> <span class="n">UPGrad</span><span class="p">())</span>  <span class="c1"># param now has a .grad field</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">param</span><span class="o">.</span><span class="n">grad</span>
+<span class="go">tensor([0.5000, 2.5000])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span>
+<span class="go">tensor([0.5,  0.5])</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of <code class="docutils literal notranslate"><span class="pre">param</span></code> now contains the aggregation (by UPGrad) of the Jacobian of
+<span class="math notranslate nohighlight">\(\begin{bmatrix}y_1 \\ y_2\end{bmatrix}\)</span> with respect to <code class="docutils literal notranslate"><span class="pre">param</span></code>. In this case, the
+weights used to combine the Jacobian are equal because there was no conflict.</p>
+</div>
 </dd></dl>
 
 </section>
@@ -314,15 +371,23 @@ input matrix (note that <code class="docutils literal notranslate"><span class="
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="../sum/">
+          <a class="next-page" href="../../aggregation/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">aggregation</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../jac/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Sum</div>
+                <div class="title">jac</div>
                 
               </div>
             </a>
@@ -355,6 +420,7 @@ input matrix (note that <code class="docutils literal notranslate"><span class="
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>
     </body>
 </html>

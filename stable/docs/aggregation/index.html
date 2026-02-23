@@ -4,11 +4,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="UPGrad" href="upgrad/"><link rel="prev" title="mtl_backward" href="../autojac/mtl_backward/">
+<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="UPGrad" href="upgrad/"><link rel="prev" title="jac_to_grad" href="../autojac/jac_to_grad/">
         <link rel="prefetch" href="../../_static/logo-light-mode.png" as="image">
         <link rel="prefetch" href="../../_static/logo-dark-mode.png" as="image">
 
-    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>aggregation - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -229,6 +229,8 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../autojac/">autojac</a><input aria-label="Toggle navigation of autojac" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../autojac/backward/">backward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../autojac/mtl_backward/">mtl_backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autojac/jac/">jac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autojac/jac_to_grad/">jac_to_grad</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">aggregation</a><input aria-label="Toggle navigation of aggregation" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -352,14 +354,14 @@ weights.</p>
 <h2>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchjd.aggregation.Aggregator">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Aggregator</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/v0.8.1/src/torchjd/aggregation/_aggregator_bases.py#L9-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Aggregator" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Aggregator</span></span><a class="reference external" href="https://github.com/SimplexLab/TorchJD/blob/v0.9.0/src/torchjd/aggregation/_aggregator_bases.py#L10-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Aggregator" title="Link to this definition">¶</a></dt>
 <dd><p>Abstract base class for all aggregators. It has the role of aggregating matrices of dimension
 <span class="math notranslate nohighlight">\(m \times n\)</span> into row vectors of dimension <span class="math notranslate nohighlight">\(n\)</span>.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="torchjd.aggregation.Weighting">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Weighting</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/v0.8.1/src/torchjd/aggregation/_weighting_bases.py#L16-L39"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Weighting" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">Weighting</span></span><a class="reference external" href="https://github.com/SimplexLab/TorchJD/blob/v0.9.0/src/torchjd/aggregation/_weighting_bases.py#L16-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.Weighting" title="Link to this definition">¶</a></dt>
 <dd><p>Abstract base class for all weighting methods. It has the role of extracting a vector of weights
 of dimension <span class="math notranslate nohighlight">\(m\)</span> from some statistic of a matrix of dimension <span class="math notranslate nohighlight">\(m \times n\)</span>,
 generally its Gramian, of dimension <span class="math notranslate nohighlight">\(m \times m\)</span>.</p>
@@ -367,7 +369,7 @@ generally its Gramian, of dimension <span class="math notranslate nohighlight">\
 
 <dl class="py class">
 <dt class="sig sig-object py" id="torchjd.aggregation.GeneralizedWeighting">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">GeneralizedWeighting</span></span><a class="reference external" href="https://github.com/TorchJD/torchjd/blob/v0.8.1/src/torchjd/aggregation/_weighting_bases.py#L57-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.GeneralizedWeighting" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">torchjd.aggregation.</span></span><span class="sig-name descname"><span class="pre">GeneralizedWeighting</span></span><a class="reference external" href="https://github.com/SimplexLab/TorchJD/blob/v0.9.0/src/torchjd/aggregation/_weighting_bases.py#L58-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchjd.aggregation.GeneralizedWeighting" title="Link to this definition">¶</a></dt>
 <dd><p>Abstract base class for all weightings that operate on generalized Gramians. It has the role of
 extracting a tensor of weights of dimension <span class="math notranslate nohighlight">\(m_1 \times \dots \times m_k\)</span> from a
 generalized Gramian of dimension
@@ -393,14 +395,14 @@ generalized Gramian of dimension
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../autojac/mtl_backward/">
+          <a class="prev-page" href="../autojac/jac_to_grad/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">mtl_backward</div>
+                <div class="title">jac_to_grad</div>
                 
               </div>
             </a>
@@ -452,12 +454,12 @@ generalized Gramian of dimension
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=1ec50272"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="../../_static/documentation_options.js?v=9341aaf2"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>
     </body>
 </html>

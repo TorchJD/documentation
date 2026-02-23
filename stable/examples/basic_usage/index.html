@@ -8,7 +8,7 @@
         <link rel="prefetch" href="../../_static/logo-light-mode.png" as="image">
         <link rel="prefetch" href="../../_static/logo-dark-mode.png" as="image">
 
-    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Basic Usage - TorchJD</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -229,6 +229,8 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/autojac/">autojac</a><input aria-label="Toggle navigation of autojac" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/backward/">backward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/mtl_backward/">mtl_backward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/jac/">jac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/autojac/jac_to_grad/">jac_to_grad</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/aggregation/">aggregation</a><input aria-label="Toggle navigation of aggregation" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -304,6 +306,7 @@ the parameters are updated using the resulting aggregation.</p>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchjd</span><span class="w"> </span><span class="kn">import</span> <span class="n">autojac</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.aggregation</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGrad</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchjd.autojac</span><span class="w"> </span><span class="kn">import</span> <span class="n">jac_to_grad</span>
 </pre></div>
 </div>
 <p>Define the model and the optimizer, as usual:</p>
@@ -333,21 +336,23 @@ negatively affected by the update.</p>
 </pre></div>
 </div>
 <p>The last steps are similar to gradient descent-based optimization, but using the two losses.</p>
-<p>Reset the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of each model parameter:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-</pre></div>
-</div>
 <p>Perform the Jacobian descent backward pass:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">autojac</span><span class="o">.</span><span class="n">backward</span><span class="p">([</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">],</span> <span class="n">aggregator</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">autojac</span><span class="o">.</span><span class="n">backward</span><span class="p">([</span><span class="n">loss1</span><span class="p">,</span> <span class="n">loss2</span><span class="p">])</span>
+<span class="n">jac_to_grad</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">aggregator</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This will populate the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of each model parameter with the corresponding aggregated
-Jacobian matrix.</p>
+<p>The first function will populate the <code class="docutils literal notranslate"><span class="pre">.jac</span></code> field of each model parameter with the corresponding
+Jacobian, and the second one will aggregate these Jacobians and store the result in the <code class="docutils literal notranslate"><span class="pre">.grad</span></code>
+field of the parameters. It also deletes the <code class="docutils literal notranslate"><span class="pre">.jac</span></code> fields save some memory.</p>
 <p>Update each parameter based on its <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field, using the <code class="docutils literal notranslate"><span class="pre">optimizer</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The model’s parameters have been updated!</p>
+<p>As usual, you should now reset the <code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of each model parameter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 
         </article>
@@ -399,9 +404,9 @@ Jacobian matrix.</p>
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=1ec50272"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="../../_static/documentation_options.js?v=9341aaf2"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script data-domain="torchjd.org" defer="defer" src="https://stats.torchjd.org/js/script.js"></script>
